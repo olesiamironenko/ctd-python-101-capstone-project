@@ -1,0 +1,15 @@
+# Web scraping
+selenium==4.21.0
+beautifulsoup4==4.12.3
+requests==2.32.3
+webdriver-manager==4.0.1  # helps auto-download ChromeDriver/GeckoDriver
+
+# Data handling
+pandas==2.2.3
+
+# Database interaction
+sqlalchemy==2.0.36
+
+# Dashboard building
+dash==2.16.1
+plotly==5.22.0
