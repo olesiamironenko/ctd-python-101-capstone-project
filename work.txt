@@ -1,0 +1,20 @@
+Scraping 1 year results page:
+    get full html from div.container
+        parse container
+            parse each table in container
+            - td.header, formated -> csv file name,
+                - if exist: open to append,
+                - if does not exist: create and write
+            - td.banner -> csv fields (1st row),
+            - 'td' calas include 'datacol' -> csv rows
+
+
+to create csv file name:
+- get prefix from page url
+- get slugified text from td.header
+- add .csv
+
+create csv file name:
+    prefix + slugified text + .csv
+
+
