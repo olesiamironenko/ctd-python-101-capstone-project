@@ -1,0 +1,314 @@
+Boston Red Sox,RosterScheduleHittingPitchingFieldingStatmaster
+Boston Red Sox,Game,Date | Box,Opponent,Score,Decision,Record
+Boston Red Sox,1,03-27-2025,at Texas Rangers,5-2,W,1-0
+Boston Red Sox,2,03-28-2025,at Texas Rangers,1-4,L,1-1
+Boston Red Sox,3,03-29-2025,at Texas Rangers,3-4,L,1-2
+Boston Red Sox,4,03-30-2025,at Texas Rangers,2-3,L,1-3
+Boston Red Sox,5,03-31-2025,at Baltimore Orioles,5-8,L,1-4
+Boston Red Sox,6,04-02-2025,at Baltimore Orioles,3-0,W,2-4
+Boston Red Sox,7,04-03-2025,at Baltimore Orioles,8-4,W,3-4
+Boston Red Sox,8,04-04-2025,vs St. Louis Cardinals,13-9,W,4-4
+Boston Red Sox,9-I,04-06-2025,vs St. Louis Cardinals,5-4,W,5-4
+Boston Red Sox,10-II,04-06-2025,vs St. Louis Cardinals,18-7,W,6-4
+Boston Red Sox,11,04-07-2025,vs Toronto Blue Jays,2-6,L,6-5
+Boston Red Sox,12,04-08-2025,vs Toronto Blue Jays,1-6,L,6-6
+Boston Red Sox,13,04-09-2025,vs Toronto Blue Jays,1-2,L,6-7
+Boston Red Sox,14,04-10-2025,vs Toronto Blue Jays,4-3,W,7-7
+Boston Red Sox,15,04-11-2025,at Chicago White Sox,1-11,L,7-8
+Boston Red Sox,16,04-12-2025,at Chicago White Sox,2-3,L,7-9
+Boston Red Sox,17,04-13-2025,at Chicago White Sox,3-1,W,8-9
+Boston Red Sox,18,04-14-2025,at Tampa Bay Rays,1-16,L,8-10
+Boston Red Sox,19,04-15-2025,at Tampa Bay Rays,7-4,W,9-10
+Boston Red Sox,20,04-16-2025,at Tampa Bay Rays,1-0,W,10-10
+Boston Red Sox,21,04-18-2025,vs Chicago White Sox,10-3,W,11-10
+Boston Red Sox,22,04-19-2025,vs Chicago White Sox,4-3,W,12-10
+Boston Red Sox,23,04-20-2025,vs Chicago White Sox,4-8,L,12-11
+Boston Red Sox,24,04-21-2025,vs Chicago White Sox,4-2,W,13-11
+Boston Red Sox,25,04-22-2025,vs Seattle Mariners,8-3,W,14-11
+Boston Red Sox,26,04-23-2025,vs Seattle Mariners,5-8,L,14-12
+Boston Red Sox,27,04-24-2025,vs Seattle Mariners,3-4,L,14-13
+Boston Red Sox,28-I,04-26-2025,at Cleveland Guardians,4-5,L,14-14
+Boston Red Sox,29-II,04-26-2025,at Cleveland Guardians,7-3,W,15-14
+Boston Red Sox,30,04-27-2025,at Cleveland Guardians,13-3,W,16-14
+Boston Red Sox,31,04-29-2025,at Toronto Blue Jays,10-2,W,17-14
+Boston Red Sox,32,04-30-2025,at Toronto Blue Jays,6-7,L,17-15
+Boston Red Sox,33,05-01-2025,at Toronto Blue Jays,2-4,L,17-16
+Boston Red Sox,34,05-02-2025,vs Minnesota Twins,6-1,W,18-16
+Boston Red Sox,35,05-03-2025,vs Minnesota Twins,3-4,L,18-17
+Boston Red Sox,36,05-04-2025,vs Minnesota Twins,4-5,L,18-18
+Boston Red Sox,37,05-06-2025,vs Texas Rangers,1-6,L,18-19
+Boston Red Sox,38,05-07-2025,vs Texas Rangers,6-4,W,19-19
+Boston Red Sox,39,05-08-2025,vs Texas Rangers,5-0,W,20-19
+Boston Red Sox,40,05-09-2025,at Kansas City Royals,1-2,L,20-20
+Boston Red Sox,41,05-10-2025,at Kansas City Royals,10-1,W,21-20
+Boston Red Sox,42,05-11-2025,at Kansas City Royals,3-1,W,22-20
+Boston Red Sox,43,05-12-2025,at Detroit Tigers,2-14,L,22-21
+Boston Red Sox,44,05-13-2025,at Detroit Tigers,9-10,L,22-22
+Boston Red Sox,45,05-14-2025,at Detroit Tigers,5-6,L,22-23
+Boston Red Sox,46,05-16-2025,vs Atlanta Braves,2-4,L,22-24
+Boston Red Sox,47,05-17-2025,vs Atlanta Braves,7-6,W,23-24
+Boston Red Sox,48,05-18-2025,vs Atlanta Braves,4-10,L,23-25
+Boston Red Sox,49,05-19-2025,vs New York Mets,3-1,W,24-25
+Boston Red Sox,50,05-20-2025,vs New York Mets,2-0,W,25-25
+Boston Red Sox,51,05-21-2025,vs New York Mets,1-5,L,25-26
+Boston Red Sox,52,05-23-2025,vs Baltimore Orioles,19-5,W,26-26
+Boston Red Sox,53-I,05-24-2025,vs Baltimore Orioles,6-5,W,27-26
+Boston Red Sox,54-II,05-24-2025,vs Baltimore Orioles,1-2,L,27-27
+Boston Red Sox,55,05-25-2025,vs Baltimore Orioles,1-5,L,27-28
+Boston Red Sox,56,05-26-2025,at Milwaukee Brewers,2-3,L,27-29
+Boston Red Sox,57,05-27-2025,at Milwaukee Brewers,1-5,L,27-30
+Boston Red Sox,58,05-28-2025,at Milwaukee Brewers,5-6,L,27-31
+Boston Red Sox,59,05-30-2025,at Atlanta Braves,5-1,W,28-31
+Boston Red Sox,60,05-31-2025,at Atlanta Braves,0-5,L,28-32
+Boston Red Sox,61,06-01-2025,at Atlanta Braves,3-1,W,29-32
+Boston Red Sox,62,06-02-2025,vs Los Angeles Angels,6-7,L,29-33
+Boston Red Sox,63,06-03-2025,vs Los Angeles Angels,3-4,L,29-34
+Boston Red Sox,64,06-04-2025,vs Los Angeles Angels,11-9,W,30-34
+Boston Red Sox,65,06-06-2025,at New York Yankees,6-9,L,30-35
+Boston Red Sox,66,06-07-2025,at New York Yankees,10-7,W,31-35
+Boston Red Sox,67,06-08-2025,at New York Yankees,11-7,W,32-35
+Boston Red Sox,68,06-09-2025,vs Tampa Bay Rays,8-10,L,32-36
+Boston Red Sox,69,06-10-2025,vs Tampa Bay Rays,3-1,W,33-36
+Boston Red Sox,70,06-11-2025,vs Tampa Bay Rays,4-3,W,34-36
+Boston Red Sox,71,06-13-2025,vs New York Yankees,2-1,W,35-36
+Boston Red Sox,72,06-14-2025,vs New York Yankees,4-3,W,36-36
+Boston Red Sox,73,06-15-2025,vs New York Yankees,2-0,W,37-36
+Boston Red Sox,74,06-16-2025,at Seattle Mariners,2-0,W,38-36
+Boston Red Sox,75,06-17-2025,at Seattle Mariners,0-8,L,38-37
+Boston Red Sox,76,06-18-2025,at Seattle Mariners,3-1,W,39-37
+Boston Red Sox,77,06-20-2025,at San Francisco Giants,7-5,W,40-37
+Boston Red Sox,Game,Date | Box,Opponent,Score,Decision,Record
+Atlanta Braves,RosterScheduleHittingPitchingFieldingStatmaster
+Atlanta Braves,Game,Date | Box,Opponent,Score,Decision,Record
+Atlanta Braves,1,03-27-2025,at San Diego Padres,4-7,L,0-1
+Atlanta Braves,2,03-28-2025,at San Diego Padres,3-4,L,0-2
+Atlanta Braves,3,03-29-2025,at San Diego Padres,0-1,L,0-3
+Atlanta Braves,4,03-30-2025,at San Diego Padres,0-5,L,0-4
+Atlanta Braves,5,03-31-2025,at Los Angeles Dodgers,1-6,L,0-5
+Atlanta Braves,6,04-01-2025,at Los Angeles Dodgers,1-3,L,0-6
+Atlanta Braves,7,04-02-2025,at Los Angeles Dodgers,5-6,L,0-7
+Atlanta Braves,8,04-04-2025,vs Miami Marlins,10-0,W,1-7
+Atlanta Braves,9,04-05-2025,vs Miami Marlins,0-4,L,1-8
+Atlanta Braves,10,04-08-2025,vs Philadelphia Phillies,7-5,W,2-8
+Atlanta Braves,11,04-09-2025,vs Philadelphia Phillies,3-4,L,2-9
+Atlanta Braves,12,04-10-2025,vs Philadelphia Phillies,4-2,W,3-9
+Atlanta Braves,13,04-11-2025,at Tampa Bay Rays,3-6,L,3-10
+Atlanta Braves,14,04-12-2025,at Tampa Bay Rays,5-4,W,4-10
+Atlanta Braves,15,04-13-2025,at Tampa Bay Rays,3-8,L,4-11
+Atlanta Braves,16,04-14-2025,at Toronto Blue Jays,8-4,W,5-11
+Atlanta Braves,17,04-15-2025,at Toronto Blue Jays,3-6,L,5-12
+Atlanta Braves,18,04-16-2025,at Toronto Blue Jays,1-3,L,5-13
+Atlanta Braves,19,04-18-2025,vs Minnesota Twins,6-4,W,6-13
+Atlanta Braves,20,04-19-2025,vs Minnesota Twins,4-3,W,7-13
+Atlanta Braves,21,04-20-2025,vs Minnesota Twins,6-2,W,8-13
+Atlanta Braves,22,04-21-2025,vs St. Louis Cardinals,7-6,W,9-13
+Atlanta Braves,23,04-22-2025,vs St. Louis Cardinals,4-10,L,9-14
+Atlanta Braves,24,04-23-2025,vs St. Louis Cardinals,4-1,W,10-14
+Atlanta Braves,25,04-25-2025,at Arizona Diamondbacks,8-2,W,11-14
+Atlanta Braves,26,04-26-2025,at Arizona Diamondbacks,8-7,W,12-14
+Atlanta Braves,27,04-27-2025,at Arizona Diamondbacks,4-6,L,12-15
+Atlanta Braves,28,04-28-2025,at Colorado Rockies,6-3,W,13-15
+Atlanta Braves,29,04-29-2025,at Colorado Rockies,8-2,W,14-15
+Atlanta Braves,30,04-30-2025,at Colorado Rockies,1-2,L,14-16
+Atlanta Braves,31,05-02-2025,vs Los Angeles Dodgers,1-2,L,14-17
+Atlanta Braves,32,05-03-2025,vs Los Angeles Dodgers,3-10,L,14-18
+Atlanta Braves,33,05-04-2025,vs Los Angeles Dodgers,4-3,W,15-18
+Atlanta Braves,34,05-05-2025,vs Cincinnati Reds,4-0,W,16-18
+Atlanta Braves,35,05-06-2025,vs Cincinnati Reds,2-1,W,17-18
+Atlanta Braves,36,05-07-2025,vs Cincinnati Reds,3-4,L,17-19
+Atlanta Braves,37,05-08-2025,vs Cincinnati Reds,5-4,W,18-19
+Atlanta Braves,38,05-09-2025,at Pittsburgh Pirates,2-3,L,18-20
+Atlanta Braves,39,05-10-2025,at Pittsburgh Pirates,3-2,W,19-20
+Atlanta Braves,40,05-11-2025,at Pittsburgh Pirates,3-4,L,19-21
+Atlanta Braves,41,05-12-2025,vs Washington Nationals,4-3,W,20-21
+Atlanta Braves,42,05-13-2025,vs Washington Nationals,5-2,W,21-21
+Atlanta Braves,43,05-14-2025,vs Washington Nationals,4-5,L,21-22
+Atlanta Braves,44,05-15-2025,vs Washington Nationals,5-2,W,22-22
+Atlanta Braves,45,05-16-2025,at Boston Red Sox,4-2,W,23-22
+Atlanta Braves,46,05-17-2025,at Boston Red Sox,6-7,L,23-23
+Atlanta Braves,47,05-18-2025,at Boston Red Sox,10-4,W,24-23
+Atlanta Braves,48,05-20-2025,at Washington Nationals,3-5,L,24-24
+Atlanta Braves,49,05-22-2025,at Washington Nationals,7-8,L,24-25
+Atlanta Braves,50,05-23-2025,vs San Diego Padres,1-2,L,24-26
+Atlanta Braves,51,05-24-2025,vs San Diego Padres,7-1,W,25-26
+Atlanta Braves,52,05-25-2025,vs San Diego Padres,3-5,L,25-27
+Atlanta Braves,53,05-27-2025,at Philadelphia Phillies,0-2,L,25-28
+Atlanta Braves,54-I,05-29-2025,at Philadelphia Phillies,4-5,L,25-29
+Atlanta Braves,55-II,05-29-2025,at Philadelphia Phillies,9-3,W,26-29
+Atlanta Braves,56,05-30-2025,vs Boston Red Sox,1-5,L,26-30
+Atlanta Braves,57,05-31-2025,vs Boston Red Sox,5-0,W,27-30
+Atlanta Braves,58,06-01-2025,vs Boston Red Sox,1-3,L,27-31
+Atlanta Braves,59,06-03-2025,vs Arizona Diamondbacks,3-8,L,27-32
+Atlanta Braves,60,06-04-2025,vs Arizona Diamondbacks,1-2,L,27-33
+Atlanta Braves,61,06-05-2025,vs Arizona Diamondbacks,10-11,L,27-34
+Atlanta Braves,62,06-06-2025,at San Francisco Giants,4-5,L,27-35
+Atlanta Braves,63,06-07-2025,at San Francisco Giants,2-3,L,27-36
+Atlanta Braves,64,06-08-2025,at San Francisco Giants,3-4,L,27-37
+Atlanta Braves,65,06-09-2025,at Milwaukee Brewers,7-1,W,28-37
+Atlanta Braves,66,06-10-2025,at Milwaukee Brewers,1-4,L,28-38
+Atlanta Braves,67,06-11-2025,at Milwaukee Brewers,6-2,W,29-38
+Atlanta Braves,68,06-13-2025,vs Colorado Rockies,12-4,W,30-38
+Atlanta Braves,69,06-14-2025,vs Colorado Rockies,4-1,W,31-38
+Atlanta Braves,70,06-15-2025,vs Colorado Rockies,1-10,L,31-39
+Atlanta Braves,71,06-17-2025,vs New York Mets,5-4,W,32-39
+Atlanta Braves,72,06-18-2025,vs New York Mets,5-0,W,33-39
+Atlanta Braves,73,06-19-2025,vs New York Mets,7-1,W,34-39
+Atlanta Braves,74,06-20-2025,at Miami Marlins,2-6,L,34-40
+Atlanta Braves,Game,Date | Box,Opponent,Score,Decision,Record
+Chicago White Sox,RosterScheduleHittingPitchingFieldingStatmaster
+Chicago White Sox,Game,Date | Box,Opponent,Score,Decision,Record
+Chicago White Sox,1,03-27-2025,vs Los Angeles Angels,8-1,W,1-0
+Chicago White Sox,2,03-29-2025,vs Los Angeles Angels,0-1,L,1-1
+Chicago White Sox,3,03-30-2025,vs Los Angeles Angels,2-3,L,1-2
+Chicago White Sox,4,03-31-2025,vs Minnesota Twins,9-0,W,2-2
+Chicago White Sox,5,04-01-2025,vs Minnesota Twins,3-8,L,2-3
+Chicago White Sox,6,04-02-2025,vs Minnesota Twins,1-6,L,2-4
+Chicago White Sox,7,04-04-2025,at Detroit Tigers,4-7,L,2-5
+Chicago White Sox,8,04-05-2025,at Detroit Tigers,2-7,L,2-6
+Chicago White Sox,9,04-06-2025,at Detroit Tigers,3-4,L,2-7
+Chicago White Sox,10,04-08-2025,at Cleveland Guardians,0-1,L,2-8
+Chicago White Sox,11,04-09-2025,at Cleveland Guardians,2-3,L,2-9
+Chicago White Sox,12,04-10-2025,at Cleveland Guardians,1-6,L,2-10
+Chicago White Sox,13,04-11-2025,vs Boston Red Sox,11-1,W,3-10
+Chicago White Sox,14,04-12-2025,vs Boston Red Sox,3-2,W,4-10
+Chicago White Sox,15,04-13-2025,vs Boston Red Sox,1-3,L,4-11
+Chicago White Sox,16,04-15-2025,vs Sacramento Athletics,3-12,L,4-12
+Chicago White Sox,17,04-16-2025,vs Sacramento Athletics,1-3,L,4-13
+Chicago White Sox,18,04-17-2025,vs Sacramento Athletics,0-8,L,4-14
+Chicago White Sox,19,04-18-2025,at Boston Red Sox,3-10,L,4-15
+Chicago White Sox,20,04-19-2025,at Boston Red Sox,3-4,L,4-16
+Chicago White Sox,21,04-20-2025,at Boston Red Sox,8-4,W,5-16
+Chicago White Sox,22,04-21-2025,at Boston Red Sox,2-4,L,5-17
+Chicago White Sox,23,04-22-2025,at Minnesota Twins,2-4,L,5-18
+Chicago White Sox,24,04-23-2025,at Minnesota Twins,3-6,L,5-19
+Chicago White Sox,25,04-24-2025,at Minnesota Twins,3-0,W,6-19
+Chicago White Sox,26,04-25-2025,at Sacramento Athletics,5-6,L,6-20
+Chicago White Sox,27,04-26-2025,at Sacramento Athletics,10-3,W,7-20
+Chicago White Sox,28,04-27-2025,at Sacramento Athletics,2-3,L,7-21
+Chicago White Sox,29,04-29-2025,vs Milwaukee Brewers,2-7,L,7-22
+Chicago White Sox,30,04-30-2025,vs Milwaukee Brewers,4-6,L,7-23
+Chicago White Sox,31,05-01-2025,vs Milwaukee Brewers,8-0,W,8-23
+Chicago White Sox,32,05-02-2025,vs Houston Astros,7-3,W,9-23
+Chicago White Sox,33,05-03-2025,vs Houston Astros,3-8,L,9-24
+Chicago White Sox,34,05-04-2025,vs Houston Astros,5-4,W,10-24
+Chicago White Sox,35,05-05-2025,at Kansas City Royals,0-3,L,10-25
+Chicago White Sox,36,05-06-2025,at Kansas City Royals,3-4,L,10-26
+Chicago White Sox,37,05-07-2025,at Kansas City Royals,1-2,L,10-27
+Chicago White Sox,38,05-08-2025,at Kansas City Royals,0-10,L,10-28
+Chicago White Sox,39,05-09-2025,vs Miami Marlins,6-2,W,11-28
+Chicago White Sox,40,05-10-2025,vs Miami Marlins,1-3,L,11-29
+Chicago White Sox,41,05-11-2025,vs Miami Marlins,4-2,W,12-29
+Chicago White Sox,42,05-13-2025,at Cincinnati Reds,5-1,W,13-29
+Chicago White Sox,43,05-14-2025,at Cincinnati Reds,4-2,W,14-29
+Chicago White Sox,44,05-15-2025,at Cincinnati Reds,1-7,L,14-30
+Chicago White Sox,45,05-16-2025,at Chicago Cubs,3-13,L,14-31
+Chicago White Sox,46,05-17-2025,at Chicago Cubs,3-7,L,14-32
+Chicago White Sox,47,05-18-2025,at Chicago Cubs,2-6,L,14-33
+Chicago White Sox,48,05-19-2025,vs Seattle Mariners,1-5,L,14-34
+Chicago White Sox,49,05-20-2025,vs Seattle Mariners,1-0,W,15-34
+Chicago White Sox,50,05-21-2025,vs Seattle Mariners,5-6,L,15-35
+Chicago White Sox,51,05-23-2025,vs Texas Rangers,4-1,W,16-35
+Chicago White Sox,52,05-24-2025,vs Texas Rangers,10-5,W,17-35
+Chicago White Sox,53,05-25-2025,vs Texas Rangers,4-5,L,17-36
+Chicago White Sox,54,05-26-2025,at New York Mets,1-2,L,17-37
+Chicago White Sox,55,05-27-2025,at New York Mets,4-6,L,17-38
+Chicago White Sox,56,05-28-2025,at New York Mets,9-4,W,18-38
+Chicago White Sox,57,05-30-2025,at Baltimore Orioles,1-2,L,18-39
+Chicago White Sox,58,05-31-2025,at Baltimore Orioles,2-4,L,18-40
+Chicago White Sox,59,06-01-2025,at Baltimore Orioles,2-3,L,18-41
+Chicago White Sox,60,06-02-2025,vs Detroit Tigers,1-13,L,18-42
+Chicago White Sox,61,06-03-2025,vs Detroit Tigers,8-1,W,19-42
+Chicago White Sox,62,06-04-2025,vs Detroit Tigers,4-5,L,19-43
+Chicago White Sox,63,06-05-2025,vs Detroit Tigers,3-2,W,20-43
+Chicago White Sox,64,06-06-2025,vs Kansas City Royals,7-2,W,21-43
+Chicago White Sox,65,06-07-2025,vs Kansas City Royals,4-1,W,22-43
+Chicago White Sox,66,06-08-2025,vs Kansas City Royals,5-7,L,22-44
+Chicago White Sox,67,06-10-2025,at Houston Astros,4-2,W,23-44
+Chicago White Sox,68,06-11-2025,at Houston Astros,2-10,L,23-45
+Chicago White Sox,69,06-12-2025,at Houston Astros,3-4,L,23-46
+Chicago White Sox,70,06-13-2025,at Texas Rangers,1-3,L,23-47
+Chicago White Sox,71,06-14-2025,at Texas Rangers,4-5,L,23-48
+Chicago White Sox,72,06-15-2025,at Texas Rangers,1-2,L,23-49
+Chicago White Sox,73,06-17-2025,vs St. Louis Cardinals,2-12,L,23-50
+Chicago White Sox,74-I,06-19-2025,vs St. Louis Cardinals,4-5,L,23-51
+Chicago White Sox,75-II,06-19-2025,vs St. Louis Cardinals,6-8,L,23-52
+Chicago White Sox,76,06-20-2025,at Toronto Blue Jays,7-1,W,24-52
+Chicago White Sox,Game,Date | Box,Opponent,Score,Decision,Record
+Arizona Diamondbacks,RosterScheduleHittingPitchingFieldingStatmaster
+Arizona Diamondbacks,Game,Date | Box,Opponent,Score,Decision,Record
+Arizona Diamondbacks,1,03-27-2025,vs Chicago Cubs,6-10,L,0-1
+Arizona Diamondbacks,2,03-28-2025,vs Chicago Cubs,8-1,W,1-1
+Arizona Diamondbacks,3,03-29-2025,vs Chicago Cubs,3-4,L,1-2
+Arizona Diamondbacks,4,03-30-2025,vs Chicago Cubs,10-6,W,2-2
+Arizona Diamondbacks,5,04-01-2025,at New York Yankees,7-5,W,3-2
+Arizona Diamondbacks,6,04-02-2025,at New York Yankees,4-3,W,4-2
+Arizona Diamondbacks,7,04-03-2025,at New York Yankees,7-9,L,4-3
+Arizona Diamondbacks,8,04-04-2025,at Washington Nationals,6-4,W,5-3
+Arizona Diamondbacks,9,04-05-2025,at Washington Nationals,3-4,L,5-4
+Arizona Diamondbacks,10,04-06-2025,at Washington Nationals,4-5,L,5-5
+Arizona Diamondbacks,11,04-07-2025,vs Baltimore Orioles,1-5,L,5-6
+Arizona Diamondbacks,12,04-08-2025,vs Baltimore Orioles,4-3,W,6-6
+Arizona Diamondbacks,13,04-09-2025,vs Baltimore Orioles,9-0,W,7-6
+Arizona Diamondbacks,14,04-11-2025,vs Milwaukee Brewers,0-7,L,7-7
+Arizona Diamondbacks,15,04-12-2025,vs Milwaukee Brewers,5-4,W,8-7
+Arizona Diamondbacks,16,04-13-2025,vs Milwaukee Brewers,5-2,W,9-7
+Arizona Diamondbacks,17,04-15-2025,at Miami Marlins,10-4,W,10-7
+Arizona Diamondbacks,18,04-16-2025,at Miami Marlins,6-2,W,11-7
+Arizona Diamondbacks,19,04-17-2025,at Miami Marlins,6-4,W,12-7
+Arizona Diamondbacks,20,04-18-2025,at Chicago Cubs,11-13,L,12-8
+Arizona Diamondbacks,21,04-19-2025,at Chicago Cubs,2-6,L,12-9
+Arizona Diamondbacks,22,04-20-2025,at Chicago Cubs,3-2,W,13-9
+Arizona Diamondbacks,23,04-22-2025,vs Tampa Bay Rays,5-1,W,14-9
+Arizona Diamondbacks,24,04-23-2025,vs Tampa Bay Rays,6-7,L,14-10
+Arizona Diamondbacks,25,04-24-2025,vs Tampa Bay Rays,4-7,L,14-11
+Arizona Diamondbacks,26,04-25-2025,vs Atlanta Braves,2-8,L,14-12
+Arizona Diamondbacks,27,04-26-2025,vs Atlanta Braves,7-8,L,14-13
+Arizona Diamondbacks,28,04-27-2025,vs Atlanta Braves,6-4,W,15-13
+Arizona Diamondbacks,29,04-29-2025,at New York Mets,3-8,L,15-14
+Arizona Diamondbacks,30,04-30-2025,at New York Mets,4-3,W,16-14
+Arizona Diamondbacks,31,05-01-2025,at New York Mets,4-2,W,17-14
+Arizona Diamondbacks,32,05-02-2025,at Philadelphia Phillies,2-3,L,17-15
+Arizona Diamondbacks,33,05-03-2025,at Philadelphia Phillies,2-7,L,17-16
+Arizona Diamondbacks,34,05-04-2025,at Philadelphia Phillies,11-9,W,18-16
+Arizona Diamondbacks,35,05-05-2025,vs New York Mets,4-5,L,18-17
+Arizona Diamondbacks,36,05-06-2025,vs New York Mets,5-1,W,19-17
+Arizona Diamondbacks,37,05-07-2025,vs New York Mets,1-7,L,19-18
+Arizona Diamondbacks,38,05-08-2025,vs Los Angeles Dodgers,5-3,W,20-18
+Arizona Diamondbacks,39,05-09-2025,vs Los Angeles Dodgers,11-14,L,20-19
+Arizona Diamondbacks,40,05-10-2025,vs Los Angeles Dodgers,3-0,W,21-19
+Arizona Diamondbacks,41,05-11-2025,vs Los Angeles Dodgers,1-8,L,21-20
+Arizona Diamondbacks,42,05-12-2025,at San Francisco Giants,2-1,W,22-20
+Arizona Diamondbacks,43,05-13-2025,at San Francisco Giants,6-10,L,22-21
+Arizona Diamondbacks,44,05-14-2025,at San Francisco Giants,8-7,W,23-21
+Arizona Diamondbacks,45,05-16-2025,vs Colorado Rockies,8-0,W,24-21
+Arizona Diamondbacks,46,05-17-2025,vs Colorado Rockies,12-14,L,24-22
+Arizona Diamondbacks,47,05-18-2025,vs Colorado Rockies,1-0,W,25-22
+Arizona Diamondbacks,48,05-19-2025,at Los Angeles Dodgers,9-5,W,26-22
+Arizona Diamondbacks,49,05-20-2025,at Los Angeles Dodgers,3-4,L,26-23
+Arizona Diamondbacks,50,05-21-2025,at Los Angeles Dodgers,1-3,L,26-24
+Arizona Diamondbacks,51,05-23-2025,at St. Louis Cardinals,3-4,L,26-25
+Arizona Diamondbacks,52,05-24-2025,at St. Louis Cardinals,5-6,L,26-26
+Arizona Diamondbacks,53,05-25-2025,at St. Louis Cardinals,3-4,L,26-27
+Arizona Diamondbacks,54,05-26-2025,vs Pittsburgh Pirates,5-0,W,27-27
+Arizona Diamondbacks,55,05-27-2025,vs Pittsburgh Pirates,6-9,L,27-28
+Arizona Diamondbacks,56,05-28-2025,vs Pittsburgh Pirates,1-10,L,27-29
+Arizona Diamondbacks,57,05-30-2025,vs Washington Nationals,7-9,L,27-30
+Arizona Diamondbacks,58,05-31-2025,vs Washington Nationals,7-11,L,27-31
+Arizona Diamondbacks,59,06-01-2025,vs Washington Nationals,3-1,W,28-31
+Arizona Diamondbacks,60,06-03-2025,at Atlanta Braves,8-3,W,29-31
+Arizona Diamondbacks,61,06-04-2025,at Atlanta Braves,2-1,W,30-31
+Arizona Diamondbacks,62,06-05-2025,at Atlanta Braves,11-10,W,31-31
+Arizona Diamondbacks,63,06-06-2025,at Cincinnati Reds,3-4,L,31-32
+Arizona Diamondbacks,64,06-07-2025,at Cincinnati Reds,1-13,L,31-33
+Arizona Diamondbacks,65,06-08-2025,at Cincinnati Reds,2-4,L,31-34
+Arizona Diamondbacks,66,06-09-2025,vs Seattle Mariners,8-4,W,32-34
+Arizona Diamondbacks,67,06-10-2025,vs Seattle Mariners,10-3,W,33-34
+Arizona Diamondbacks,68,06-11-2025,vs Seattle Mariners,5-2,W,34-34
+Arizona Diamondbacks,69,06-13-2025,vs San Diego Padres,5-1,W,35-34
+Arizona Diamondbacks,70,06-14-2025,vs San Diego Padres,8-7,W,36-34
+Arizona Diamondbacks,71,06-15-2025,vs San Diego Padres,2-8,L,36-35
+Arizona Diamondbacks,72,06-17-2025,at Toronto Blue Jays,4-5,L,36-36
+Arizona Diamondbacks,73,06-18-2025,at Toronto Blue Jays,1-8,L,36-37
+Arizona Diamondbacks,74,06-19-2025,at Toronto Blue Jays,9-5,W,37-37
+Arizona Diamondbacks,75,06-20-2025,at Colorado Rockies,14-8,W,38-37
+Arizona Diamondbacks,Game,Date | Box,Opponent,Score,Decision,Record

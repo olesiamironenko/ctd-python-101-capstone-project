@@ -27,9 +27,24 @@ Teams and players
         - first td goes to first banner list   
         - second td goes to second bannner list
 
-- iterate through the teams lists to get:
-    - div.navtabbinactive to get links for later scraping
-        - scrape tables, write into csv
-    - all the info from first banner to the last banner, write into csv - roster info
+- iterate through the teams roster links to get ("roster" is part of the link title):
+    - scrape tb.boxed and form rows for futre csv
+        - get td.banner
+        - get td containing "datacol"
+        - add team name as the first row (team name is the title from roster_links list)
+    - write/append csv
+        - name csv based on text in div.navbaractive
+        - write/append rows
+
+    - go to next link from div.navbaractive
+        - scrape tb.boxed and form rows for futre csv
+            - get td.banner
+            - get td containing "datacol"
+            - add team name as the first row
+        - write/append csv
+            - name csv based on text in div.navbaractive
+            - write/append rows
+
+
 
     
