@@ -18,3 +18,18 @@ create csv file name:
     prefix + slugified text + .csv
 
 
+Teams and players
+
+- get teams from the table whith the header Major League only:
+    - get td.header, first only,
+    - get td.banner, first tr only, create 2 dicts for collecting team names and links,
+    - get team names and links from trs:
+        - first td goes to first banner list   
+        - second td goes to second bannner list
+
+- iterate through the teams lists to get:
+    - div.navtabbinactive to get links for later scraping
+        - scrape tables, write into csv
+    - all the info from first banner to the last banner, write into csv - roster info
+
+    

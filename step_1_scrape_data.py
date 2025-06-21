@@ -62,6 +62,21 @@ def extract_unique_banners(table):
             unique = [c for c in cells if not (c in seen or seen.add(c))]
             return unique
     return []   
+
+def get_team(td, base_url):
+    """
+    Return (team_title, absolute_link) for the <a> whose title
+    contains the word 'roster'. If none, return empty strings.
+    """
+    for a in td.find_all("a", href=True):
+        title = a.get("title", "")
+        if re.search(r"roster", title, re.I):
+            clean = re.sub(r"\b\d{4}\b", "", title, flags=re.I)   # drop year
+            clean = re.sub(r"\broster\b", "", clean, flags=re.I)       # drop 'roster'
+            team_name = re.sub(r"\s{2,}", " ", clean).strip()
+
+            return team_name, urljoin(base_url, a["href"])
+    return "", ""
 # ------------------------------------------------------------------
 
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
@@ -72,136 +87,228 @@ driver.get('https://www.baseball-almanac.com/yearmenu.shtml')
 # Grab the surviving window handle (always the newest)
 driver.switch_to.window(driver.window_handles[-1])
 
+# Keep base url to join with extracted later
+base_url = 'https://www.baseball-almanac.com/'
 
-# 1.1. Get years and links from 'Year to Year' page
-# Scrape html from years table using selenium
+# # 1.1. Get years and links from 'Year to Year' page
+# # Scrape html from years table using selenium
+# try:
+#     # Wait for the table to be loaded 
+#     table = WebDriverWait(driver, 15).until(
+#         EC.presence_of_element_located((By.CSS_SELECTOR, 'table.boxed'))
+#     )
+
+#     # Get HTML 
+#     table_html = table.get_attribute('outerHTML')
+#     # print(table_html) 
+
+# except TimeoutException:
+#     print("Timed-out waiting for the year list table.")
+
+
+# # 1.2. Convert relative links to absolute 
+# try:
+#     # Parse scraped html using beautiful soup 
+#     soup = BeautifulSoup(table_html, 'html.parser')
+#     # print(soup)
+
+#     # Regular expression that matches exactly four digits 
+#     year_pattern = re.compile(r"^\d{4}$")
+
+#     # Extract links from scraped HTML 
+#     year_links = [
+#         (link.get_text(strip=True), urljoin(base_url, link["href"]))
+#         for link in soup.find_all("a", href=True)
+#         if year_pattern.match(link.get_text(strip=True))
+# ]
+#     # # Preview the result 
+#     # for year, url in year_links:
+#     #     print(year, ": ", url)
+
+#     # Get links for last 5 years only
+#     # Step 1: Convert to int → find max year
+#     years_int = [int(year) for year, _ in year_links]
+#     last_year = max(years_int)
+
+#     # Step 2: Build set of last 5 years
+#     last_5_years = set(range(last_year - 4, last_year + 1))
+
+#     # Step 3: Filter original list
+#     filtered_links = [
+#         (year, url)
+#         for year, url in year_links
+#         if int(year) in last_5_years
+#     ]
+
+#     # Step 4: Sort if desired (e.g., from oldest to newest)
+#     filtered_links.sort(key=lambda tup: int(tup[0]), reverse=True) # newest first
+
+#     header_done = set()
+
+#     for year, url in filtered_links:
+#         # # Preview
+#         # print(f"{year} → {url}")
+       
+#         # Scrape each year
+#         driver.get(url)
+#         driver.switch_to.window(driver.window_handles[-1])
+
+#         try:
+#             WebDriverWait(driver, 15).until(
+#                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.container"))
+#             )
+
+#             soup = BeautifulSoup(driver.page_source, "html.parser")
+
+#             for table in soup.find_all("table", class_="boxed"):
+#                 header_td = table.find("td", class_="header")
+#                 if not header_td:
+#                     continue
+
+#                 filename = make_csv_name(driver.current_url, header_td)
+#                 if not filename:
+#                     continue
+
+#                 # print("CSV filename would be:", filename)
+                
+#                 # Banner cells to headers 
+#                 banner_cells = extract_unique_banners(table)
+#                 print(filename, banner_cells)
+#                 if not banner_cells:
+#                     continue 
+
+#                 # Add Year column at the front
+#                 # headers = ["Year"] + banner_cells
+
+#                 # Datacol cells to data matrix
+#                 data_cells = [td.get_text(strip=True) for td in table.find_all("td", class_ =lambda c: c and "datacol" in c)]
+#                 width = len(banner_cells) # how many cols per row
+#                 rows = [data_cells[i:i+width] for i in range(0, len(data_cells), width)]
+
+#                 # Inject the year into each row (front or back must match headers)
+#                 for r in rows:
+#                     r.insert(0, year) # year first
+
+#                 # Write / append to CSV 
+#                 fp = Path(filename)
+
+#                 need_header = filename not in header_done
+#                 with fp.open("a", newline="", encoding="utf-8") as f:
+#                     w = csv.writer(f)
+#                     if need_header:
+#                         w.writerow(["Year"] + banner_cells)
+#                         header_done.add(filename) # don't write it again
+#                     w.writerows(rows)
+
+#                 # print(f"✓ {len(rows)} rows → {filename}")
+
+#         except Exception as e:
+#             print("Top‑level error:", e)
+
+# except Exception as e:
+#         print(f"{e}") 
+
+# 2.1. Get team and players info
+# Get team menu link
 try:
-    # Wait for the table to be loaded 
-    table = WebDriverWait(driver, 15).until(
+    teams_link_el = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.LINK_TEXT, "Team by Team"))
+    )
+
+    teams_url = teams_link_el.get_attribute('href')
+    # print("Team by Team link:", teams_url)
+except TimeoutException:
+    print("link not found")
+
+try:
+    url = teams_url
+
+    # Get last handle
+    driver.get(url)
+    driver.switch_to.window(driver.window_handles[-1])
+
+    # Wait for table to load
+    team_info = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'table.boxed'))
     )
 
     # Get HTML 
-    table_html = table.get_attribute('outerHTML')
-    # print(table_html) 
+    team_info_html = team_info.get_attribute('outerHTML')
+    # print(team_info_table_html)
 
-except TimeoutException:
-    print("Timed-out waiting for the year list table.")
-
-
-# 1.2. Convert relative linnks sto absolute 
-try:
-    # Keep base url to join with extracted later
-    base_url = 'https://www.baseball-almanac.com/'
-
-    # Parse scraped html using beautiful soup 
-    soup = BeautifulSoup(table_html, 'html.parser')
+    soup = BeautifulSoup(team_info_html, 'html.parser')
     # print(soup)
 
-    # Regular expression that matches exactly four digits 
-    year_pattern = re.compile(r"^\d{4}$")
+    team_table = soup.find("table")
+    
+    # Extract league names from banner row
+    banner_names = extract_unique_banners(team_table)
+    if len(banner_names) < 2:
+        raise ValueError("Need at least two banner columns")
+    league1, league2 = banner_names[:2]
+    prefix1 = "al" if "american" in league1.lower() else "nl"
+    prefix2 = "al" if "american" in league2.lower() else "nl"
+    # print(banner_names)
 
-    # Extract links from scraped HTML 
-    year_links = [
-        (link.get_text(strip=True), urljoin(base_url, link["href"]))
-        for link in soup.find_all("a", href=True)
-        if year_pattern.match(link.get_text(strip=True))
-]
-    # # Preview the result 
-    # for year, url in year_links:
-    #     print(year, ": ", url)
+    # Extract rows and links
 
-    # Get links for last 5 years only
-    # Step 1: Convert to int → find max year
-    years_int = [int(year) for year, _ in year_links]
-    last_year = max(years_int)
+    rows = [] # final CSV rows
+    roster_links = [] # [(team_name, abs_link), …]
+    seen_links = set() # dedupe roster links
+    seen_banners = set() # dedupe banner rows
+    stop = False # flag to halt after duplicate banner
 
-    # Step 2: Build set of last 5 years
-    last_5_years = set(range(last_year - 4, last_year + 1))
+    for tr in team_table.find_all("tr"):
+        if stop:
+            break
 
-    # Step 3: Filter original list
-    filtered_links = [
-        (year, url)
-        for year, url in year_links
-        if int(year) in last_5_years
-    ]
+        # Get banner row
+        banner_tds = tr.find_all("td", class_="banner")
+        if banner_tds:
+            for td in banner_tds:
+                text = td.get_text(strip=True)
+                if text in seen_banners: # first duplicate -> set flag
+                    stop = True
+                    break
+                seen_banners.add(text)
+            continue # skip data parsing on banner rows
 
-    # Step 4: Sort if desired (e.g., from oldest to newest)
-    filtered_links.sort(key=lambda tup: int(tup[0]), reverse=True) # newest first
+        # Get data row
+        datacols = tr.find_all("td", class_=lambda c: c and "datacol" in c)
+        if len(datacols) < 2:
+            continue
 
-    header_done = set()
+        team1_title, team1_link = get_team(datacols[0], base_url)
+        team2_title, team2_link = get_team(datacols[1], base_url)
+        
+        # Collect rows
+        rows.append([team1_title, team1_link, team2_title, team2_link])
 
-    for year, url in filtered_links:
-        # # Preview
-        # print(f"{year} → {url}")
-       
-        # Scrape each year
-        driver.get(url)
-        driver.switch_to.window(driver.window_handles[-1])
+        # Collect unique roster links
+        for title, link in ((team1_title, team1_link), (team2_title, team2_link)):
+            if link and link not in seen_links:
+                roster_links.append((title, link))
+                seen_links.add(link)
 
-        try:
-            WebDriverWait(driver, 15).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "div.container"))
-            )
+    print(f"Collected {len(rows)} rows")
+    print(f"Collected {len(roster_links)} unique roster links")
 
-            soup = BeautifulSoup(driver.page_source, "html.parser")
+    # ── 3. write / append CSV ────────────────────────────────────────────
+    filename = f"{prefix1}_{prefix2}_teams.csv"
+    csv_path = Path(filename)
+    need_header = not csv_path.exists()
 
-            for table in soup.find_all("table", class_="boxed"):
-                header_td = table.find("td", class_="header")
-                if not header_td:
-                    continue
+    with csv_path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if need_header:
+            w.writerow([
+                f"{prefix1}_team_title", f"{prefix1}_team_link",
+                f"{prefix2}_team_title", f"{prefix2}_team_link"
+            ])
+        w.writerows(rows)
 
-                filename = make_csv_name(driver.current_url, header_td)
-                if not filename:
-                    continue
+    print(f"✓ Wrote {len(rows)} rows → {filename}")
 
-                # print("CSV filename would be:", filename)
-                
-                # Banner cells to headers 
-                banner_cells = extract_unique_banners(table)
-                print(filename, banner_cells)
-                if not banner_cells:
-                    continue 
-
-                # Add Year column at the front
-                # headers = ["Year"] + banner_cells
-
-                # Datacol cells to data matrix
-                data_cells = [td.get_text(strip=True) for td in table.find_all("td", class_ =lambda c: c and "datacol" in c)]
-                width = len(banner_cells) # how many cols per row
-                rows = [data_cells[i:i+width] for i in range(0, len(data_cells), width)]
-
-                # Inject the year into each row (front or back must match headers)
-                for r in rows:
-                    r.insert(0, year) # year first
-
-                # Write / append to CSV 
-                fp = Path(filename)
-
-                need_header = filename not in header_done
-                with fp.open("a", newline="", encoding="utf-8") as f:
-                    w = csv.writer(f)
-                    if need_header:
-                        w.writerow(["Year"] + banner_cells)
-                        header_done.add(filename) # don't write it again
-                    w.writerows(rows)
-
-                # print(f"✓ {len(rows)} rows → {filename}")
-
-        except Exception as e:
-            print("Top‑level error:", e)
-
-except Exception as e:
-        print(f"{e}") 
-
-# Get team menu link
-try:
-    team_link_el = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.LINK_TEXT, "Team by Team"))
-    )
-
-    team_url = team_link_el.get_attribute('href')
-    print("Team by Team link:", team_url)
 except TimeoutException:
     print("link not found")
 
