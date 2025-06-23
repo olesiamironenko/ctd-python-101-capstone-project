@@ -51,5 +51,8 @@
     - load csv to df 
     - drop nas and duplicates
     
+    - separate big dfs into smaler ones,
+    - connect dfs using pk fk connection
+    
 
     

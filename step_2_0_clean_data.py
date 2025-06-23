@@ -46,7 +46,7 @@ def clean_df(df):
 # print(roster_clean.head())
 # print(schedule_clean.head())
 
-
+# ------------------------------------------ #
 # Cleaning roster.csv
 # Add column names 
 col_names = ["Team", "No", "Name", "Height", "Weight", "Throws", "Bats", "DOB"]
@@ -159,14 +159,20 @@ players["player_id"] = pd.Series(range(len(players)), dtype="int64")
 # print(players["player_id"].dtype)
 # print(players.head())
 # print(players.columns)
+# ------------------------------------------ #
 
+#------------------------------------------#
 # Clean al_hitting_statistics_league_leaders
+#------------------------------------------#
 al_hitting_statistics_league_leaders = pd.read_csv('./al_hitting_statistics_league_leaders.csv')
 al_hitting_statistics_league_leaders_clean = clean_df(al_hitting_statistics_league_leaders)
 # print(al_hitting_statistics_league_leaders_clean.head())
 
+#------------------------------------------#
 # Create separate dfs for:
+#------------------------------------------#
 # Statistics
+#------------------------------------------#
 # Keep rows where 'Statistic' does NOT start with a digit
 # Mask for rows where Statistic does NOT start with a digit
 valid_stat_mask = ~al_hitting_statistics_league_leaders_clean["Statistic"].str.match(r"^\d", na=False)
@@ -189,29 +195,28 @@ stats = pd.DataFrame({
 stats = stats.iloc[:12].reset_index(drop=True)
 # print(statistics)
 
-# 
+#------------------------------------------#
 # Replace "Name" with player_id
+#------------------------------------------#
 # Make sure both columns exist and are typed correctly
-# ------------------------------------------------------------------
 players["player_id"] = players["player_id"].astype("int64")
 players["Name"]      = players["Name"].astype(str).str.strip()
 
 # Build the FK column from mapping
 name_to_id = dict(zip(players["Name"], players["player_id"]))
 
-print(al_hitting_statistics_league_leaders_clean.columns)
+# print(al_hitting_statistics_league_leaders_clean.columns)
 
 al_hitting_statistics_league_leaders_clean["player_id"] = al_hitting_statistics_league_leaders_clean["Name"].map(name_to_id)
-#            ^ column now exists (may contain NaN for unmatched names)
+# column now exists (may contain NaN for unmatched names)
 
 al_hitting_statistics_league_leaders_clean["player_id"] = pd.to_numeric(
     al_hitting_statistics_league_leaders_clean["player_id"],
     errors="coerce"        # bad values become NaN
 ).astype("Int64")          # nullable integer that still allows <NA>
 al_hitting_statistics_league_leaders_clean["Name"]        = al_hitting_statistics_league_leaders_clean["Name"].astype(str).str.strip()
-# ------------------------------------------------------------------
-# CHECK  — are the (player_id, Name) pairs identical?
-# ------------------------------------------------------------------
+
+# CHeck if the (player_id, Name) pairs identical?
 check = (
     al_hitting_statistics_league_leaders_clean.merge(
         players[["player_id", "Name"]]
@@ -224,9 +229,9 @@ check = (
 mismatch = check[ check["Name"] != check["Name_ref"] ]
 
 if mismatch.empty:
-    print("✅ All player_id + Name pairs in stats agree with players.")
+    print("All player_id + Name pairs in stats agree with players.")
 else:
-    print("❌ Mismatching rows:")
+    print("Mismatching rows:")
     print(mismatch[["player_id", "Name", "Name_ref"]].head())
     #  Fix wrong names
     al_hitting_statistics_league_leaders_clean.loc[mismatch.index, "Name"] = mismatch["Name_ref"]
@@ -235,7 +240,7 @@ else:
     name_to_id = dict(zip(players["Name"], players["player_id"]))
     al_hitting_statistics_league_leaders_clean["player_id"] = al_hitting_statistics_league_leaders_clean["Name"].map(name_to_id).astype("Int64")
 
-    # Drop every stats row that failed to map to a player_id
+    # Drop every hitting stats row that failed to map to a player_id
     al_hitting_statistics_league_leaders_clean = (
         al_hitting_statistics_league_leaders_clean
             .dropna(subset=["player_id"])      # remove NaN / <NA> IDs
@@ -248,79 +253,83 @@ else:
                     how="left").isna().any().any()):
         raise ValueError("Some player rows still don’t match — inspect manually.")
     else:
-        print("✅ Stats table repaired: all pairs now match players.")
+        print("Stats table repaired: all pairs now match players.")
 
 # Drop "Name" column
 al_hitting_statistics_league_leaders_clean = al_hitting_statistics_league_leaders_clean.drop(columns=["Name"])
 
 
-# 
+#------------------------------------------#
 # Replace "Team" with team_id
+#------------------------------------------#
 # Make sure both columns exist and are typed correctly
-# ------------------------------------------------------------------
 print(teams.columns)
 teams["team_id"] = teams["team_id"].astype("int64")
-teams["Name"]      = teams["Name"].astype(str).str.strip()
+teams["Team"]      = teams["Team"].astype(str).str.strip()
 
 # Build the FK column from mapping
-name_to_id = dict(zip(players["Name"], players["player_id"]))
+team_to_id = dict(zip(teams["Team"], teams["team_id"]))
 
 print(al_hitting_statistics_league_leaders_clean.columns)
 
-al_hitting_statistics_league_leaders_clean["player_id"] = al_hitting_statistics_league_leaders_clean["Name"].map(name_to_id)
-#            ^ column now exists (may contain NaN for unmatched names)
+al_hitting_statistics_league_leaders_clean["team_id"] = al_hitting_statistics_league_leaders_clean["Team"].map(team_to_id)
+# column now exists (may contain NaN for unmatched names)
 
-al_hitting_statistics_league_leaders_clean["player_id"] = pd.to_numeric(
-    al_hitting_statistics_league_leaders_clean["player_id"],
+al_hitting_statistics_league_leaders_clean["team_id"] = pd.to_numeric(
+    al_hitting_statistics_league_leaders_clean["team_id"],
     errors="coerce"        # bad values become NaN
 ).astype("Int64")          # nullable integer that still allows <NA>
-al_hitting_statistics_league_leaders_clean["Name"]        = al_hitting_statistics_league_leaders_clean["Name"].astype(str).str.strip()
-# ------------------------------------------------------------------
-# CHECK  — are the (player_id, Name) pairs identical?
-# ------------------------------------------------------------------
+al_hitting_statistics_league_leaders_clean["Team"]        = al_hitting_statistics_league_leaders_clean["Team"].astype(str).str.strip()
+
+# Drop every hitting stats row that failed to map to a team_id
+al_hitting_statistics_league_leaders_clean = (
+    al_hitting_statistics_league_leaders_clean
+        .dropna(subset=["team_id"])      # remove NaN / <NA> IDs
+        .reset_index(drop=True)            # tidy up the index
+)
+
+# Check if the (team_id, Team) pairs identical?
 check = (
     al_hitting_statistics_league_leaders_clean.merge(
-        players[["player_id", "Name"]]
-            .rename(columns={"Name": "Name_ref"}),
-        on="player_id",
+        teams[["team_id", "Team"]]
+            .rename(columns={"Team": "Team_ref"}),
+        on="team_id",
         how="left"
     )
 )
 
-mismatch = check[ check["Name"] != check["Name_ref"] ]
+mismatch = check[ check["Team"] != check["Team_ref"] ]
 
 if mismatch.empty:
-    print("✅ All player_id + Name pairs in stats agree with players.")
+    print("All team_id + Team pairs in stats agree with teams.")
 else:
-    print("❌ Mismatching rows:")
-    print(mismatch[["player_id", "Name", "Name_ref"]].head())
-    #  Fix wrong names
-    al_hitting_statistics_league_leaders_clean.loc[mismatch.index, "Name"] = mismatch["Name_ref"]
+    print("Mismatching rows:")
+    print(mismatch[["team_id", "Team", "Team_ref"]].head())
+    #  Fix wrong teams
+    al_hitting_statistics_league_leaders_clean.loc[mismatch.index, "Team"] = mismatch["Team_ref"]
 
-    # Fix wrong IDs (use name→id dict)
-    name_to_id = dict(zip(players["Name"], players["player_id"]))
-    al_hitting_statistics_league_leaders_clean["player_id"] = al_hitting_statistics_league_leaders_clean["Name"].map(name_to_id).astype("Int64")
-
-    # Drop every stats row that failed to map to a player_id
-    al_hitting_statistics_league_leaders_clean = (
-        al_hitting_statistics_league_leaders_clean
-            .dropna(subset=["player_id"])      # remove NaN / <NA> IDs
-            .reset_index(drop=True)            # tidy up the index
-    )
+    # Fix wrong team IDs (use team→id dict)
+    name_to_id = dict(zip(teams["Team"], teams["team_id"]))
+    al_hitting_statistics_league_leaders_clean["team_id"] = al_hitting_statistics_league_leaders_clean["Team"].map(name_to_id).astype("Int64")
 
     # re-check
-    if (al_hitting_statistics_league_leaders_clean.merge(players[["player_id","Name"]],
-                    on=["player_id","Name"],
+    if (al_hitting_statistics_league_leaders_clean.merge(teams[["team_id","Team"]],
+                    on=["team_id"],
                     how="left").isna().any().any()):
         raise ValueError("Some player rows still don’t match — inspect manually.")
     else:
-        print("✅ Stats table repaired: all pairs now match players.")
+        print("Stats table repaired: all pairs now match players.")
 
-# Drop "Name" column
-al_hitting_statistics_league_leaders_clean = al_hitting_statistics_league_leaders_clean.drop(columns=["Name"])
+# Drop "Team" column
+al_hitting_statistics_league_leaders_clean = al_hitting_statistics_league_leaders_clean.drop(columns=["Team"])
 
+al_hitting_statistics_league_leaders_clean = al_hitting_statistics_league_leaders_clean.dropna().reset_index(drop=True)
 
+print(al_hitting_statistics_league_leaders_clean.head())
+
+#------------------------------------------#
 # Replace "Statistic" column with "statistic_id"
+#------------------------------------------#
 mask_not_digit = ~al_hitting_statistics_league_leaders_clean["Statistic"].str.match(r"^\d", na=False)
 df_tmp = al_hitting_statistics_league_leaders_clean.loc[mask_not_digit]
 
