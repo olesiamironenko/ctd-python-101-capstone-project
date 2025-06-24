@@ -1,114 +1,102 @@
 import pandas as pd
 import numpy as np
+import warnings
+from pandas.errors import ParserWarning
 
+warnings.simplefilter(action='ignore', category=ParserWarning)
 # ------------------------------------------------------------------
-# Cleaning df
-def clean_df(df):
+# Standardize column names
+def std_col_names(df):
+    df.columns = df.columns.str.strip().str.lower().str.replace(".", "_").str.replace(" ", "_").str.replace("#", "no")
+    return df
+
+# Replace nonsence values with NaN
+def replace_nonsence(df):
     df = df.replace(["To Be Determined", "--"], np.nan).copy()
+    return df
+
+# Drop nas
+def dropnas(df):
     df = df.dropna().drop_duplicates().reset_index(drop=True)
     return df
 
+# Convert a column to integer:
+def column_to_int(df, column_name):
+    df[column_name] = df[column_name].astype(int)
+    return df
+
+# Keep only digits
+def digits_only(df, column_name):
+    df[column_name] = df[column_name].astype(str).str.replace(r"\D", "", regex=True)
+    return df
+
+# Drop rows where a column has no digits
+def drop_non_digits(df, column_name):
+    mask_has_digits = df[column_name].astype(str).str.contains(r"\d")
+    df = df[mask_has_digits].reset_index(drop=True)
+    return df
+
+# Drop rows where one coli=unnm have specified value/values
+def drop_rows_w_value(df, column, value):
+    df = df[df[column] != value].reset_index(drop=True)
+    return df
+
+# Create separate dfs for future lookup table based on statistic column
+def create_lookup_df(df, column_name, new_column_name_1, new_column_name_2):
+    # Extract unique values
+    unique_vals = (
+        df[column_name]
+        .dropna()
+        .unique()
+    )
+    # Create lookup df
+    new_df = pd.DataFrame({
+        new_column_name_1: range(len(unique_vals)),
+        new_column_name_2: unique_vals
+    })
+    return new_df
+
+# Keep only rows where col starts with a letter
+def col_val_start_letter(df, columnn_name):
+    mask_starts_letter = df[columnn_name].astype(str).str.match(r"[A-Za-z]")
+    df = df[mask_starts_letter].reset_index(drop=True)
+    return df
+
+# Replace text column with fk
+def replace_txt_cloumn_with_fk(df1, df1_col1, df1_new_col, df2, df2_col1, df2_col2):
+    mask_not_digit = ~df1[df1_col1].str.match(r"^\d", na=False)
+    df_tmp = df1.loc[mask_not_digit]
+
+    # Now drop the rows where Statistic is NaN
+    df1 = (
+        df_tmp.dropna(subset=[df1_col1]).reset_index(drop=True)
+    )
+
+    # Keep only valid Statistic rows
+    #     • NOT starting with a digit
+    #     • NOT NaN
+    mask_valid = (
+        ~df1[df1_col1].str.match(r"^\d", na=False)
+    ) & (
+        df1[df1_col1].notna()
+    )
+
+    df1_col1 = (
+        df1_col1
+            .loc[mask_valid]
+            .reset_index(drop=True)
+    )
+
+    # Map Statistic → statistic_id
+    df_map = dict(zip(df2[df2_col1], df2[df2_col2]))
+
+    df1[df1_new_col] = (
+        df1[df1_col1]
+            .map(df_map)
+            .astype("int64")        # safe: no NaNs left after step 0
+    )
+
+    # Drop the text column
+    df1.drop(columns=[df1_col1], inplace=True)
+    return df1
 # ------------------------------------------------------------------
-
-# Cleaning roster.csv
-# Add column names 
-col_names = ["Team", "No", "Name", "Height", "Weight", "Throws", "Bats", "DOB"]
-
-# Define and skip bad rows:
-def skip_if_short(fields):
-    """Skip any line that has < 8 comma-separated fields."""
-    return None if len(fields) < 8 else fields
-
-# Open roster.csv, no headers, column names added, bad rows skipped
-roster = pd.read_csv(
-    "roster.csv",
-    header=None,
-    names=col_names,     # give the DF its 10 columns up front
-    engine="python",     # callable only works with the Python parser
-    on_bad_lines=skip_if_short,
-    quoting=3            # ignore stray quotes if the file has none
-)
-
-# Add a column with player types based on values in column "Name"
-# 1.  Capture the header text *only* on rows where the first column equals '#'
-roster['Player Type'] = roster['Name'].where(roster['No'] == '#')
-
-# 2.  Forward-fill so every subsequent row inherits the last seen header text
-roster['Player Type'] = roster['Player Type'].ffill()
-
-# 3.  Drop the header rows themselves
-roster = roster[roster['No'] != '#'].reset_index(drop=True)
-
-# # 4.  Inspect the result
-# print(roster[['Name', 'Player Type']].head(20))   # first 20 rows
-# print(roster['Player Type'].value_counts())       # how many rows per section
-
-roster = clean_df(roster)
-
-# print(roster.tail(5))  # Check the result
-# print(roster)
-
-# Create separate dfs for:
-# Teams
-teams = roster[["Team"]].drop_duplicates().reset_index(drop=True)
-teams["team_id"] = teams.index + 1
-# print(teams_df)
-
-# Hands (for Trows and Bats)
-# Collect every distinct value that appears in either column
-hand_values = (
-    pd.concat([roster["Throws"], roster["Bats"]])
-      .dropna()
-      .str.strip()
-      .unique()
-)
-
-# Filter: keep only values containing at least one letter (A-Z, case-insensitive)
-filtered_hands = [h for h in hand_values if pd.notna(h) and any(c.isalpha() for c in str(h))]
-
-# Create hands lookup table
-hands = pd.DataFrame({"hand": sorted(filtered_hands)}).reset_index().rename(columns={"index": "hand_id"})
-# print(hands)
-
-# Player Types
-# Get unique Player Types, sorted
-unique_types = sorted(roster["Player Type"].dropna().unique())
-
-# Create player_types lookup table with IDs
-player_types = pd.DataFrame({
-    "player_type_id": range(len(unique_types)),
-    "player_type": unique_types
-})
-# print(player_types)
-
-# Players
-# Convert Player Name to string explicitly
-roster["Name"] = roster["Name"].astype(str).str.strip()
-
-# Keep only rows where Name does NOT start with a digit
-roster = roster[~roster["Name"].str.match(r'^\d')]
-
-# Convert "No" to integer
-roster["No"] = pd.to_numeric(roster["No"].astype(str).str.extract(r'(\d+)')[0], errors='coerce').astype('Int64')
-
-# Convert DOB to datetime (errors='coerce' will set bad parses to NaT)
-roster["DOB"] = pd.to_datetime(roster["DOB"], errors='coerce')
-
-# Map Team, Throws, Bats, Player Type to their IDs:
-team_map = dict(zip(teams["Team"], teams["team_id"]))
-hand_map = dict(zip(hands["hand"], hands["hand_id"]))
-player_type_map = dict(zip(player_types["player_type"], player_types["player_type_id"]))
-
-roster["team_id"] = roster["Team"].map(team_map)
-roster["throws_id"] = roster["Throws"].str.strip().map(hand_map)
-roster["bats_id"] = roster["Bats"].str.strip().map(hand_map)
-roster["player_type_id"] = roster["Player Type"].map(player_type_map)
-
-# Drop the columns no longer needed:
-players = roster.drop(columns=["Team", "Throws", "Bats", "Player Type", "Height", "Weight"])
-
-# Reorder columns as needed
-players = players[
-    ["team_id", "No", "Name", "DOB", "player_type_id", "throws_id", "bats_id"]
-]
-print(players)

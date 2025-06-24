@@ -1,6 +1,7 @@
 1. Scraping
 
-    Scraping 1 year results page:
+    Scraping 1 year results page: 
+        Get years and links from 'Year to Year' page
         get full html from div.container
             parse container
                 parse each table in container
@@ -9,6 +10,15 @@
                     - if does not exist: create and write
                 - td.banner -> csv fields (1st row),
                 - 'td' calas include 'datacol' -> csv rows
+
+        Years table: 
+            - table class=ba-sub
+
+        Year links:
+            - a
+            - href, relative link
+            - title, contain year and league name
+            - text, contain year
 
 
     to create csv file name:
@@ -53,6 +63,6 @@
     
     - separate big dfs into smaler ones,
     - connect dfs using pk fk connection
-    
+
 
     
