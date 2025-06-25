@@ -49,6 +49,10 @@ driver.set_page_load_timeout(10) # fail fast if site hangs
 # ---------------------------------------------------------- #
 # Keep base url to join with extracted later
 base_url = 'https://www.baseball-almanac.com/'
+
+url = 'https://www.baseball-almanac.com/yearmenu.shtml'
+
+header_done = set()
 # ---------------------------------------------------------- #
 
 
@@ -119,13 +123,39 @@ def get_team(td, base_url):
 # ---------------------------------------------------------- #
 # Web Scraping
 # ---------------------------------------------------------- #
-# ---------------------------------------------------------- #
-# Load the web page
-driver.get('https://www.baseball-almanac.com/yearmenu.shtml')
 
-# Grab the surviving window handle (always the newest)
-driver.switch_to.window(driver.window_handles[-1])
+# Common scraping activity using selenium and BeautifulSoup
+def scraping_page(url):
+    try:
+        # Load the web page
+        driver.get(url)
+
+        # Grab the surviving window handle (always the newest)
+        driver.switch_to.window(driver.window_handles[-1])
+
+        # Wait for the table to be loaded 
+        get_html = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.TAG_NAME, 'body'))
+        )
+    except TimeoutException:
+        print("Timed-out waiting for the year list table.")
+    
+    try:
+        # Get HTML 
+        html = get_html.get_attribute('outerHTML')
+        # print(div_container_html) 
+
+    # Parse scraped html using beautiful soup 
+        soup = BeautifulSoup(html, 'html.parser')
+        # print(soup)
+        return soup
+
+    except Exception as e:
+            print(f"\n ERROR in: Common scraping page activity: getting html")
+            print(f"\n ERROR in: Common scraping page activity: reutrning soup")
+            print(f"{e}") 
 # ---------------------------------------------------------- #
+
 
 # ---------------------------------------------------------- #
 # Scrape yearly history
@@ -134,42 +164,27 @@ driver.switch_to.window(driver.window_handles[-1])
 # 1.1. Get years and links from 'Year to Year' page
 # ---------------------------------------------------------- #
 
-# Scrape html from years table using selenium
-try:
-    # Wait for the table to be loaded 
-    table = WebDriverWait(driver, 15).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, 'table.boxed'))
-    )
-    # Get HTML 
-    table_html = table.get_attribute('outerHTML')
-    # print(table_html) 
-except TimeoutException:
-    print("Timed-out waiting for the year list table.")
-
-# Parse scraped html using beautiful soup 
-try:
-    soup = BeautifulSoup(table_html, 'html.parser')
-    # print(soup)
-except Exception as e:
-    print(f"{e}") 
-
 # Find table with class boxed
-try:
-    table = soup.find('table', class_='boxed')
-    # print(table) 
-except Exception as e:
-        print(f"{e}") 
+try:  
+    soup = scraping_page(url)
+    years_table = soup.find('table', class_='boxed')
+
 
 # Find td.headers and subtables with year links
-try:
     # Find first 2 headers
-    t_headers = table.find_all('td', class_='header')
-    header1 = t_headers[0]
-    header2 = t_headers[1]
+    if years_table:
+        # print(years_table) 
+        t_headers = years_table.find_all('td', class_='header')
+        header1 = t_headers[0]
+        header2 = t_headers[1]
+    else:
+        print("No table with class 'boxed' was found")
 except Exception as e:
+        print(f"\n ERROR in: Find table with class boxed")
+        print(f"\n ERROR in: Find first 2 headers")
         print(f"{e}") 
 
-# Derive year links from year table
+# Derive year links from year table - function
 try:
     def link_list(header):
         # Find parent of t_headers
@@ -206,80 +221,90 @@ try:
                 'year': year_text,
                 'league_name':league_name
             })
-        year_link_df = pd.DataFrame(year_link_list)
-        print(year_link_df)
-        year_link_df.info()
-        return year_link_df
-    
+        
+        return year_link_list
+  
 except Exception as e:
+        print(f"\n ERROR in: Derive year links function")
         print(f"{e}") 
 
+# Derive year links from year table - function call
+# Create link lists and merge them
 try:
-    link_list(header1)
-    link_list(header2)
-except TimeoutException:
-    print("link not found")
+    year_link_list1 = link_list(header1)
+    year_link_list2 = link_list(header2)
 
-# try:
-#     # Regular expression that matches exactly four digits 
-#     year_pattern = re.compile(r"^\d{4}$")
+    year_link_list_full = year_link_list1 + year_link_list2
+except Exception as e:
+        print(f"\n ERROR in: Creating link lists")
+        print(f"{e}") 
 
-#     # Extract links from scraped HTML 
-#     year_links = [
-#         (link.get_text(strip=True), urljoin(base_url, link["href"]))
-#         for link in soup.find_all("a", href=True)
-#         if year_pattern.match(link.get_text(strip=True))
-# # ]
-#     # # Preview the result 
-#     # for year, url in year_links:
-#     #     print(year, ": ", url)
+# Get links for last 5 years only
+try:
+    # Step 1: Convert to int → find max year
+    int_years = []
+    for year_link in year_link_list_full:
+        year = year_link['year']
+        int_year = int(year)
+        # print(int_year)
+        int_years.append(int_year)
+    last_year = max(int_years)
+    print(last_year)
 
-#     # Get links for last 5 years only
-#     # Step 1: Convert to int → find max year
-#     years_int = [int(year) for year, _ in year_links]
-#     last_year = max(years_int)
+    # Step 2: Build set of last 5 years
+    last_5_years = set(range(last_year - 4, last_year + 1))
+    print(last_5_years)
 
-#     # Step 2: Build set of last 5 years
-#     last_5_years = set(range(last_year - 4, last_year + 1))
+    # Step 3: Filter original list
+    last_5_years_links = []
+    for year_link in year_link_list_full:
+        year = int(year_link['year'])
+        if year in last_5_years:
+            last_5_years_links.append(year_link) 
 
-#     # Step 3: Filter original list
-#     filtered_links = [
-#         (year, url)
-#         for year, url in year_links
-#         if int(year) in last_5_years
-#     ]
+    # print(last_5_years_links)
 
-#     # Step 4: Sort if desired (e.g., from oldest to newest)
-#     filtered_links.sort(key=lambda tup: int(tup[0]), reverse=True) # newest first
+except Exception as e:
+    print(f"\n ERROR in: Finding 5 last years only")
+    print(f"{e}") 
 
-#     header_done = set()
+# Create year link df out of 5 last years links list
+try:
+    last_5_years_links_df = pd.DataFrame(last_5_years_links)
+    # print(last_5_years_links_df)
+    # last_5_years_links_df.info()
 
-#     for year, url in filtered_links:
-#         # # Preview
-#         # print(f"{year} → {url}")
-       
-#         # Scrape each year
-#         driver.get(url)
-#         driver.switch_to.window(driver.window_handles[-1])
+except Exception as e:
+        print(f"\n ERROR in: Creating link lists")
+        print(f"{e}") 
+# ---------------------------------------------------------- #
 
-#         try:
-#             WebDriverWait(driver, 15).until(
-#                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.container"))
-#             )
 
-#             soup = BeautifulSoup(driver.page_source, "html.parser")
+# ---------------------------------------------------------- #
+# 1.2. Scrape each year page
+# ---------------------------------------------------------- #       
+try:
+    for year_link in last_5_years_links:
+        year = year_link['year']
+        league_name = year_link['league_name']
+        year_href = year_link['year_href']
 
-#             for table in soup.find_all("table", class_="boxed"):
-#                 header_td = table.find("td", class_="header")
-#                 if not header_td:
-#                     continue
+        print(f"Scraping {year} - {league_name} from {year_href}")
+
+        y_l_soup = scraping_page(year_href)
+
+        # # Find table with the td.header p contains "hiting"
+        # for table in yl_soup.find_all("table", class_="boxed"):
+        #     header_td = table.find("td", class_="header")
+        #     if not header_td:
+        #         continue
 
 #                 filename = make_csv_name(driver.current_url, header_td)
 #                 if not filename:
 #                     continue
 
 #                 # print("CSV filename would be:", filename)
-                
+            
 #                 # Banner cells to headers 
 #                 banner_cells = extract_unique_banners(table)
 #                 # print(filename, banner_cells)
@@ -311,8 +336,8 @@ except TimeoutException:
 
 #                 # print(f"✓ {len(rows)} rows → {filename}")
 
-#         except Exception as e:
-#             print("Top‑level error:", e)
+# except Exception as e:
+#     print("Top‑level error:", e)
 
 # except Exception as e:
 #         print(f"{e}") 
