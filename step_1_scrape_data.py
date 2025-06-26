@@ -398,13 +398,7 @@ except Exception as e:
 
 # Write 5 years stats into CSVs
 try:   
-    last_5_ys_yealy_stats.to_csv('last_5_ys_yealy_stats.csv', sep=',', index=False)
-
-    with open(csv_name, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Name", "Link"])
-        for link in links:
-            writer.writerow([link["name"], link["url"]])
+    last_5_ys_yealy_stats.to_csv('./csv/last_5_ys_yealy_stats.csv', sep=',', index=False)
 
 except Exception as e:
     print("ERROR: Get tables titles")
