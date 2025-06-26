@@ -1,0 +1,95 @@
+player_id,player_name,team_id
+0,Aaron Judge,27
+1,Aaron Judge,29
+2,Adam Cimber,46
+3,Adam Duvall,24
+4,Amed Rosario,10
+5,Anthony DeSclafani,38
+6,Austin Riley,4
+7,Blake Snell,36
+8,Bo Bichette,46
+9,Bobby Witt Jr.,18
+10,Bobby Witt Jr.,19
+11,Bryan Shaw,11
+12,Bryce Harper,33
+13,Chris Bassitt,46
+14,Chris Sale,3
+15,Corbin Burnes,25
+16,Corbin Carroll,1
+17,Corbin Carroll,2
+18,Corey Seager,44
+19,David Bednar,34
+20,David Peralta,2
+21,Dylan Cease,7
+22,Dylan Cease,35
+23,Elly De La Cruz,8
+24,Emmanuel Clase,9
+25,Emmanuel Clase,10
+26,Esteury Ruiz,31
+27,Ezequiel Tovar,12
+28,Fernando Tatis Jr.,36
+29,Framber Valdez,17
+30,Freddie Freeman,4
+31,Freddie Freeman,22
+32,Gavin Lux,22
+33,German Marquez,13
+34,Gerrit Cole,29
+35,J.P. Crawford,39
+36,Jarren Duran,6
+37,Jeff McNeil,28
+38,Jeimer Candelario,15
+39,Joey Gallo,44
+40,John Brebbia,38
+41,Jon Berti,24
+42,Jordan Lyles,19
+43,Jorge Mateo,5
+44,Jose Caballero,42
+45,José Ramírez,10
+46,Juan Soto,27
+47,Juan Soto,36
+48,Juan Soto,47
+49,Julio Urias,22
+50,Julio Urías,22
+51,Justin Verlander,17
+52,Kenley Jansen,4
+53,Kevin Gausman,45
+54,Kevin Gausman,46
+55,Kyle Schwarber,32
+56,Kyle Schwarber,33
+57,Kyle Tucker,17
+58,Kyle Wright,4
+59,"Lance McCullers, Jr.",17
+60,Liam Hendriks,7
+61,Luis Arraez,23
+62,Luis Arraez,24
+63,Luis Arraez,26
+64,Marcus Semien,44
+65,Mark Melancon,36
+66,Matt Brash,39
+67,Matt Olson,4
+68,Max Fried,3
+69,Miguel Castro,2
+70,Mookie Betts,22
+71,Paul Goldschmidt,41
+72,Pete Alonso,28
+73,Robbie Ray,46
+74,Ronald Acuña Jr.,4
+75,Ronel Blanco,16
+76,Ryan Helsley,40
+77,Salvador Perez,19
+78,Sandy Alcantara,24
+79,Sean Manaea,31
+80,Shohei Ohtani,20
+81,Shohei Ohtani,21
+82,Spencer Strider,4
+83,T.J. McFarland,30
+84,Tarik Skubal,14
+85,To Be Determined,0
+86,Trea Turner,47
+87,Tyler Rogers,37
+88,Tyler Rogers,38
+89,Vladimir Guerrero Jr.,46
+90,Whit Merrifield,19
+91,Yandy Díaz,43
+92,Yuli Gurriel,17
+93,Zack Wheeler,33

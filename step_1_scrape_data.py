@@ -19,6 +19,7 @@ from collections import defaultdict
 from urllib.parse import urljoin
 from pathlib import Path
 import numpy as np
+import os
 
 # ---------------------------------------------------------- #
 # Driver settings
@@ -726,5 +727,40 @@ try:
 
     except Exception as e:
         print(f"{e}")
+
+    def save_dfs_to_csvs(df_dict, folder_path='.'):
+        """
+        Save multiple DataFrames to CSV files.
+
+        Args:
+            df_dict (dict): Dictionary where keys are filenames (without .csv) and values are DataFrames.
+            folder_path (str): Directory to save CSVs in. Defaults to current directory.
+        """
+        try:
+            os.makedirs(folder_path, exist_ok=True)
+
+            for name, df in df_dict.items():
+                file_path = os.path.join(folder_path, f"{name}.csv")
+                df.to_csv(file_path, index=False)
+                print(f"Saved: {file_path}")
+
+        except Exception as e:
+            print(f"{e}")
+
+    try:
+        save_dfs_to_csvs({
+                'stat_titles': stat_titles,
+                'statistics': statistics,
+                'players': players,
+                'teams': teams,
+                'years': years,
+                'leagues': leagues,
+                'last_5_ys_yealy_stats': last_5_ys_yealy_stats
+            },
+            folder_path='csv'
+        )
+    except Exception as e:
+        print(f"{e}")
+
 finally:
     driver.quit()
