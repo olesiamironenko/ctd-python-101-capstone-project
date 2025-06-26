@@ -252,15 +252,54 @@ def scrape_stats_table(table):
     return df
 
 try:
-    print(f"\n scrape_y_stat_table1 results:")
-    y_stat_df_1 = scrape_stats_table(scrape_y_stat_table1)
-    print(y_stat_df_1)
-    y_stat_df_1.info()
+    def separate_df(new_df, new_df_id_col, original_df, *original_columns):
+    #    Step 0: pull the column names out *column
+        for o_col in original_columns:
+            original_df[o_col] = original_df[o_col].astype(str).str.strip()
+    #    Step 1: create separate df
+    #               1.1. create values column from main df
 
-    print(f"\n scrape_y_stat_table2 results:")
-    y_stat_df_2 = scrape_stats_table(scrape_y_stat_table2)
-    print(y_stat_df_2)
-    y_stat_df_2.info()
+        new_df_values = (
+            original_df[list(original_columns)]
+            .drop_duplicates()
+            .sort_values(by=list(original_columns))
+            .reset_index(drop=True)
+        )
+
+        new_df = (
+            lookup_df_values
+            .reset_index()
+            .rename(columns={"index": "statistic_id"})
+        )
+
+        return lookup_df
+    
+    print lookup_df(statistics_values)
+
+    def create_lookup_df(df, *cols, id_col_name='id'):
+        """
+        Create a normalized lookup DataFrame with a primary key column.
+
+        Args:
+            df: Original DataFrame
+            *cols: Column names to include in the lookup table
+            id_col_name: Name of the ID column to be created
+
+        Returns:
+            A new DataFrame with a unique ID column and unique trimmed combinations of input columns.
+        """
+        for col in cols:
+            df[col] = df[col].astype(str).str.strip()
+
+        lookup_df = (
+            df[list(cols)]
+            .drop_duplicates()
+            .sort_values(by=list(cols))
+            .reset_index(drop=True)
+            .reset_index()  # create ID column
+            .rename(columns={"index": id_col_name})
+        )
+        return lookup_df
 
 except Exception as e:
     print("ERROR: Get tables titles")
