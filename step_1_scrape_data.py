@@ -59,50 +59,6 @@ header_done = set()
 # ---------------------------------------------------------- #
 # Helper functions
 # ---------------------------------------------------------- #
-def get_prefix(page_url: str) -> str:
-    path = urlparse(page_url).path                # '/yearly/yr2024a.shtml'
-    pre_dot = path[-7] if len(path) >= 7 else ""  # char right before '.shtml'
-    return "al_" if pre_dot == "a" else "nl_" if pre_dot == "n" else ""
-
-def clean_table_name(header_td) -> str:
-    """Return the plain text fragment between the two <a> links."""
-    p_tag = header_td.find("p")
-    if not p_tag:
-        raise ValueError("No <p> tag inside header")
-
-    text_parts = []
-    for node in p_tag.contents:
-        if isinstance(node, NavigableString):
-            for part in map(str.strip, node.strip("←→ ").split("|")):
-                # drop "2023", "2024", etc. at the *start* of the fragment
-                part = re.sub(r"^\d{4}\s*", "", part)   # ← NEW line
-                if part:                                # keep only non‑empty strings
-                    text_parts.append(part)
-
-    # choose the longest non‑empty fragment
-    return max(text_parts, key=len) if text_parts else ""
-
-def slugify(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
-
-def make_csv_name(page_url: str, header_td) -> str:
-    core   = slugify(clean_table_name(header_td))
-    prefix = get_prefix(page_url)
-    return f"{prefix}{core}.csv" if core else ""
-
-def extract_unique_banners(table):
-    """Return a deduplicated, ordered list of column names
-       from the FIRST <tr> that contains <td class="banner"> cells."""
-    for tr in table.find_all("tr"): # walk rows top‑down
-        cells = [td.get_text(strip=True) 
-            for td in tr.find_all("td", class_="banner")]
-        if cells: # found the first banner row
-            # de‑dupelicate but keep order
-            seen = set()
-            unique = [c for c in cells if not (c in seen or seen.add(c))]
-            return unique
-    return []   
-
 def get_team(td, base_url):
     """
     Return (team_title, absolute_link) for the <a> whose title
@@ -185,8 +141,8 @@ except Exception as e:
         print(f"{e}") 
 
 # Derive year links from year table - function
-try:
-    def link_list(header):
+def link_list(header):
+    try:
         # Find parent of t_headers
         header_tr = header.find_parent('tr')
 
@@ -214,7 +170,7 @@ try:
                 elif year_href[-7] == "n":
                     league_name = "National League"
                 else:
-                    ""
+                    continue
             # Append dicts to year_link_list
             year_link_list.append({
                 'year_href': year_href,
@@ -224,12 +180,11 @@ try:
         
         return year_link_list
   
-except Exception as e:
+    except Exception as e:
         print(f"\n ERROR in: Derive year links function")
         print(f"{e}") 
 
-# Derive year links from year table - function call
-# Create link lists and merge them
+# Create link lists ussing link_list function, and merge them the lists
 try:
     year_link_list1 = link_list(header1)
     year_link_list2 = link_list(header2)
@@ -249,11 +204,11 @@ try:
         # print(int_year)
         int_years.append(int_year)
     last_year = max(int_years)
-    print(last_year)
+    # print(last_year)
 
     # Step 2: Build set of last 5 years
     last_5_years = set(range(last_year - 4, last_year + 1))
-    print(last_5_years)
+    # print(last_5_years)
 
     # Step 3: Filter original list
     last_5_years_links = []
@@ -281,9 +236,14 @@ except Exception as e:
 
 
 # ---------------------------------------------------------- #
-# 1.2. Scrape each year page
+# 1.2. Scrape each year page of the last 5 years
 # ---------------------------------------------------------- #       
 try:
+    # Declare lists for each table sscraping results
+    last_5_ys_yealy_stats_1_list = []
+    last_5_ys_yealy_stats_2_list = []
+    
+    # Loop through year links
     for year_link in last_5_years_links:
         year = year_link['year']
         league_name = year_link['league_name']
@@ -291,53 +251,165 @@ try:
 
         print(f"Scraping {year} - {league_name} from {year_href}")
 
+        # Get necessary html code from one page for further parsing
         y_l_soup = scraping_page(year_href)
 
-        # # Find table with the td.header p contains "hiting"
-        # for table in yl_soup.find_all("table", class_="boxed"):
-        #     header_td = table.find("td", class_="header")
-        #     if not header_td:
-        #         continue
+        # Parse collected html
+        try:
+            # Find all tabls with class boxed
+            y_stat_tables = y_l_soup.find_all("table", class_="boxed")
+            # print(y_stat_tables)
 
-#                 filename = make_csv_name(driver.current_url, header_td)
-#                 if not filename:
-#                     continue
+            # Get only 2 tables: hitting stats and pitching stats
+            # Assign tables to variables
+            scrape_y_stat_table1 = y_stat_tables[0]
+            scrape_y_stat_table2 = y_stat_tables[1]
+        except Exception as e:
+            print("ERROR: Find tabls with class boxed")
+            print(f"{e}") 
 
-#                 # print("CSV filename would be:", filename)
-            
-#                 # Banner cells to headers 
-#                 banner_cells = extract_unique_banners(table)
-#                 # print(filename, banner_cells)
-#                 if not banner_cells:
-#                     continue 
+        # Create stat list
+        # - tr: td.header: h2: year -> column (name + data)
+        # - tr: td.header: h2: league -> column (name + data)
+        # - tr: td.header: p: stats title/type -> column (name + data)
+        # - tr: td.banner: column names -> column names / first row
+        # - tr: td.datacolBlue + tr.datacolBox: row name (td.datacolBlue) + data (datacolBox) -> rows
 
-#                 # Add Year column at the front
-#                 # headers = ["Year"] + banner_cells
+        def scrape_stats_table(table):
+            # Declare all necessary lists and variables
+            rows = []
+            first_row = []
+            y_stat_year = None
+            y_stat_league = None
+            y_stat_title = None
 
-#                 # Datacol cells to data matrix
-#                 data_cells = [td.get_text(strip=True) for td in table.find_all("td", class_ =lambda c: c and "datacol" in c)]
-#                 width = len(banner_cells) # how many cols per row
-#                 rows = [data_cells[i:i+width] for i in range(0, len(data_cells), width)]
+            # Scrape a table
+            # Find all table rows and iterate through them
+            trs = table.find_all('tr')
 
-#                 # Inject the year into each row (front or back must match headers)
-#                 for r in rows:
-#                     r.insert(0, year) # year first
+            for tr in trs:
+                # Step 1: Header info (only once)
+                header = tr.find('td', class_='header')
+                if header and not y_stat_year:
+                    # Get year and league name
+                    h2 = header.find('h2')
+                    if h2:
+                        h2_text = h2.get_text(strip=True)
+                        year_match = re.search(r"^(\d{4})", h2_text)
+                        league_match = re.search(r"^\d{4}\s+(\w+\s+\w+)", h2_text)
+                        if year_match:
+                            y_stat_year = year_match.group(1)
+                        if league_match:
+                            y_stat_league = league_match.group(1)
 
-#                 # Write / append to CSV 
-#                 fp = Path(filename)
+                    # Get statistic name
+                    p = header.find('p')
+                    if p:
+                        p_text = p.get_text(strip=True)
+                        stat_match = re.search(r".*\d{4}\s+(\w+\s+\w+)", p_text)
+                        if stat_match:
+                            y_stat_title = stat_match.group(1)
 
-#                 need_header = filename not in header_done
-#                 with fp.open("a", newline="", encoding="utf-8") as f:
-#                     w = csv.writer(f)
-#                     if need_header:
-#                         w.writerow(["Year"] + banner_cells)
-#                         header_done.add(filename) # don't write it again
-#                     w.writerows(rows)
+                # Step 2: Banners — first row
+                banners = tr.find_all('td', class_='banner')
+                if banners:
+                    first_row = ['Name'] + [b.text.strip() for b in banners]
 
-#                 # print(f"✓ {len(rows)} rows → {filename}")
+                # Step 3: Data rows
+                datacol_blue = tr.find('td', class_='datacolBlue')
+                datacol_boxes = tr.find_all('td', class_='datacolBox')
+                if datacol_blue and datacol_boxes:
+                    row_name = datacol_blue.text.strip()
+                    row_data = [box.text.strip() for box in datacol_boxes]
+                    full_row = [row_name] + row_data
+                    rows.append(full_row)
 
-# except Exception as e:
-#     print("Top‑level error:", e)
+            # Step 4: Assemble DataFrame
+            if rows:
+                df = pd.DataFrame(rows, columns=first_row[:len(rows[0])])  # Trim header if needed
+            else:
+                df = pd.DataFrame()
+
+            df['year'] = y_stat_year
+            df['league'] = y_stat_league
+            df['stat_title'] = y_stat_title
+
+            return df
+
+        try:
+            # print(f"\n scrape_y_stat_table1 results:")
+            y_stat_df_1 = scrape_stats_table(scrape_y_stat_table1)
+            # print(y_stat_df_1)
+            last_5_ys_yealy_stats_1_list.append(y_stat_df_1)
+
+            # print(f"\n scrape_y_stat_table2 results:")
+            y_stat_df_2 = scrape_stats_table(scrape_y_stat_table2)
+            # print(y_stat_df_2)
+            last_5_ys_yealy_stats_2_list.append(y_stat_df_2)
+
+
+        except Exception as e:
+            print(f"{e}") 
+    
+    # Combine scraping results from all year pages into one list per each teble scraped
+    try:
+        last_5_ys_yealy_stats_1_df = pd.concat(last_5_ys_yealy_stats_1_list, ignore_index=True)
+        print(last_5_ys_yealy_stats_1_df)
+        last_5_ys_yealy_stats_1_df.info()
+
+        last_5_ys_yealy_stats_2_df = pd.concat(last_5_ys_yealy_stats_2_list, ignore_index=True)
+        print(last_5_ys_yealy_stats_2_df)
+        last_5_ys_yealy_stats_2_df.info()
+
+        
+
+    except Exception as e:
+        print("ERROR: Get tables titles")
+        print(f"{e}")
+
+    # Clean dfs
+    try:
+        # Step 1: Rename columns
+        last_5_ys_yealy_stats_1_df.columns = ['team_name', 'statistics', 'player_name', 'year', 'league', 'stat_title']
+        last_5_ys_yealy_stats_2_df.columns = ['team_name', 'statistics', 'player_name', 'year', 'league', 'stat_title']
+
+        # Step 2: Convert year column to integer
+        last_5_ys_yealy_stats_1_df['year'] = last_5_ys_yealy_stats_1_df['year'].astype(int)
+        last_5_ys_yealy_stats_2_df['year'] = last_5_ys_yealy_stats_2_df['year'].astype(int)
+
+    except Exception as e:
+        print("ERROR: Get tables titles")
+        print(f"{e}")
+
+    # Concat cleaned dfs
+    try:
+        last_5_ys_yealy_stats = pd.concat([last_5_ys_yealy_stats_1_df,  last_5_ys_yealy_stats_2_df], ignore_index=True)
+
+        print(last_5_ys_yealy_stats)
+        last_5_ys_yealy_stats.info()
+
+    except Exception as e:
+        print("ERROR: Get tables titles")
+        print(f"{e}")
+
+except Exception as e:
+        print("ERROR: Get tables titles")
+        print(f"{e}")
+
+# Write 5 years stats into CSVs
+try:   
+    last_5_ys_yealy_stats.to_csv('last_5_ys_yealy_stats.csv', sep=',', index=False)
+
+    with open(csv_name, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Name", "Link"])
+        for link in links:
+            writer.writerow([link["name"], link["url"]])
+
+except Exception as e:
+    print("ERROR: Get tables titles")
+    print(f"{e}") 
+
 
 # except Exception as e:
 #         print(f"{e}") 
