@@ -227,9 +227,12 @@ def scrape_stats_table(table):
                     y_stat_title = stat_title_match.group(1)
 
         # Step 2: Banners — first row
-        banners = tr.find_all('td', class_='banner')
-        if banners:
-            first_row = ['Name'] + [b.text.strip() for b in banners]
+        if not first_row:
+            banners = tr.find_all('td', class_='banner')
+            if banners:
+                for banner in banners:
+                    banner_text = banner.get_text(strip=True)
+                    first_row.append(banner_text)
 
         # Step 3: Data rows
         datacol_blue = tr.find('td', class_='datacolBlue')
@@ -252,10 +255,12 @@ try:
     print(f"\n scrape_y_stat_table1 results:")
     y_stat_df_1 = scrape_stats_table(scrape_y_stat_table1)
     print(y_stat_df_1)
+    y_stat_df_1.info()
 
     print(f"\n scrape_y_stat_table2 results:")
     y_stat_df_2 = scrape_stats_table(scrape_y_stat_table2)
     print(y_stat_df_2)
+    y_stat_df_2.info()
 
 except Exception as e:
     print("ERROR: Get tables titles")

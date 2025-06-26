@@ -311,22 +311,42 @@ try:
                             y_stat_title = stat_match.group(1)
 
                 # Step 2: Banners — first row
-                banners = tr.find_all('td', class_='banner')
-                if banners:
-                    first_row = ['Name'] + [b.text.strip() for b in banners]
+                if not first_row:
+                    banners = tr.find_all('td', class_='banner')
+                    if banners:
+                        for banner in banners:
+                            banner_text = banner.get_text(strip=True)
+                            first_row.append(banner_text)
 
                 # Step 3: Data rows
                 datacol_blue = tr.find('td', class_='datacolBlue')
-                datacol_boxes = tr.find_all('td', class_='datacolBox')
-                if datacol_blue and datacol_boxes:
+                if datacol_blue:
                     row_name = datacol_blue.text.strip()
-                    row_data = [box.text.strip() for box in datacol_boxes]
+
+                    # Get *all* <td> elements in the row
+                    tds = tr.find_all('td')
+
+                    # Skip the first td (it's datacol_blue), and parse the rest
+                    row_data = []
+                    skip = True
+                    for td in tds:
+                        if skip:
+                            if td == datacol_blue:
+                                skip = False
+                            continue
+
+                        text = td.get_text(strip=True)
+                        row_data.append(text)
+
                     full_row = [row_name] + row_data
-                    rows.append(full_row)
+
+                    # Only append if it matches banner length
+                    if len(full_row) == len(first_row):
+                        rows.append(full_row)
 
             # Step 4: Assemble DataFrame
             if rows:
-                df = pd.DataFrame(rows, columns=first_row[:len(rows[0])])  # Trim header if needed
+                df = pd.DataFrame(rows, columns=first_row)  # Trim header if needed
             else:
                 df = pd.DataFrame()
 
@@ -347,21 +367,26 @@ try:
             # print(y_stat_df_2)
             last_5_ys_yealy_stats_2_list.append(y_stat_df_2)
 
-
         except Exception as e:
             print(f"{e}") 
     
     # Combine scraping results from all year pages into one list per each teble scraped
     try:
         last_5_ys_yealy_stats_1_df = pd.concat(last_5_ys_yealy_stats_1_list, ignore_index=True)
-        print(last_5_ys_yealy_stats_1_df)
-        last_5_ys_yealy_stats_1_df.info()
+        # print(last_5_ys_yealy_stats_1_df)
+        # last_5_ys_yealy_stats_1_df.info()
 
         last_5_ys_yealy_stats_2_df = pd.concat(last_5_ys_yealy_stats_2_list, ignore_index=True)
-        print(last_5_ys_yealy_stats_2_df)
-        last_5_ys_yealy_stats_2_df.info()
+        # print(last_5_ys_yealy_stats_2_df)
+        # last_5_ys_yealy_stats_2_df.info()
 
-        
+    except Exception as e:
+        print("ERROR: Combine scraping results from all year")
+        print(f"{e}")
+
+    # Concat dfs
+    try:
+        last_5_ys_yealy_stats = pd.concat([last_5_ys_yealy_stats_1_df,  last_5_ys_yealy_stats_2_df], ignore_index=True)
 
     except Exception as e:
         print("ERROR: Get tables titles")
@@ -370,21 +395,11 @@ try:
     # Clean dfs
     try:
         # Step 1: Rename columns
-        last_5_ys_yealy_stats_1_df.columns = ['team_name', 'statistics', 'player_name', 'year', 'league', 'stat_title']
-        last_5_ys_yealy_stats_2_df.columns = ['team_name', 'statistics', 'player_name', 'year', 'league', 'stat_title']
+        last_5_ys_yealy_stats.columns = ['statistics', 'player_name', 'team_name', 'no', 'top_25', 'year', 'league', 'stat_title']
 
         # Step 2: Convert year column to integer
-        last_5_ys_yealy_stats_1_df['year'] = last_5_ys_yealy_stats_1_df['year'].astype(int)
-        last_5_ys_yealy_stats_2_df['year'] = last_5_ys_yealy_stats_2_df['year'].astype(int)
-
-    except Exception as e:
-        print("ERROR: Get tables titles")
-        print(f"{e}")
-
-    # Concat cleaned dfs
-    try:
-        last_5_ys_yealy_stats = pd.concat([last_5_ys_yealy_stats_1_df,  last_5_ys_yealy_stats_2_df], ignore_index=True)
-
+        last_5_ys_yealy_stats['year'] = last_5_ys_yealy_stats['year'].astype(int)
+        
         print(last_5_ys_yealy_stats)
         last_5_ys_yealy_stats.info()
 
@@ -396,13 +411,13 @@ except Exception as e:
         print("ERROR: Get tables titles")
         print(f"{e}")
 
-# Write 5 years stats into CSVs
-try:   
-    last_5_ys_yealy_stats.to_csv('./csv/last_5_ys_yealy_stats.csv', sep=',', index=False)
+# # Write 5 years stats into CSVs
+# try:   
+#     last_5_ys_yealy_stats.to_csv('./csv/last_5_ys_yealy_stats.csv', sep=',', index=False)
 
-except Exception as e:
-    print("ERROR: Get tables titles")
-    print(f"{e}") 
+# except Exception as e:
+#     print("ERROR: Get tables titles")
+#     print(f"{e}") 
 
 
 # except Exception as e:
