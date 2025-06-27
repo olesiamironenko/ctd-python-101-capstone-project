@@ -64,5 +64,24 @@
     - separate big dfs into smaler ones,
     - connect dfs using pk fk connection
 
+------------------------------------
 
-    
+sql query
+- show all statistics for the last 5 years
+
+- list teams with top 25 players
+
+- league vs league performance for choosen year
+
+------------------------------------
+
+dashboard
+- stats dinamic
+    - one of the stats timline
+        - user can chose stats title and statistic
+
+- team performance
+    - top 5 teams
+        - user can chose stats title and statistic
+
+    - top 5 players

@@ -219,8 +219,8 @@ try:
     # ---------------------------------------------------------- #       
     try:
         # Declare lists for each table sscraping results
-        last_5_ys_yealy_stats_1_list = []
-        last_5_ys_yealy_stats_2_list = []
+        last_5_ys_yearly_stats_1_list = []
+        last_5_ys_yearly_stats_2_list = []
         
         # Loop through year links
         for year_link in last_5_years_links:
@@ -339,25 +339,25 @@ try:
                 # print(f"\n scrape_y_stat_table1 results:")
                 y_stat_df_1 = scrape_stats_table(scrape_y_stat_table1)
                 # print(y_stat_df_1)
-                last_5_ys_yealy_stats_1_list.append(y_stat_df_1)
+                last_5_ys_yearly_stats_1_list.append(y_stat_df_1)
 
                 # print(f"\n scrape_y_stat_table2 results:")
                 y_stat_df_2 = scrape_stats_table(scrape_y_stat_table2)
                 # print(y_stat_df_2)
-                last_5_ys_yealy_stats_2_list.append(y_stat_df_2)
+                last_5_ys_yearly_stats_2_list.append(y_stat_df_2)
 
             except Exception as e:
                 print(f"{e}") 
         
         # Combine scraping results from all year pages into one list per each teble scraped
         try:
-            last_5_ys_yealy_stats_1_df = pd.concat(last_5_ys_yealy_stats_1_list, ignore_index=True)
-            # print(last_5_ys_yealy_stats_1_df)
-            # last_5_ys_yealy_stats_1_df.info()
+            last_5_ys_yearly_stats_1_df = pd.concat(last_5_ys_yearly_stats_1_list, ignore_index=True)
+            # print(last_5_ys_yearly_stats_1_df)
+            # last_5_ys_yearly_stats_1_df.info()
 
-            last_5_ys_yealy_stats_2_df = pd.concat(last_5_ys_yealy_stats_2_list, ignore_index=True)
-            # print(last_5_ys_yealy_stats_2_df)
-            # last_5_ys_yealy_stats_2_df.info()
+            last_5_ys_yearly_stats_2_df = pd.concat(last_5_ys_yearly_stats_2_list, ignore_index=True)
+            # print(last_5_ys_yearly_stats_2_df)
+            # last_5_ys_yearly_stats_2_df.info()
 
         except Exception as e:
             print("ERROR: Combine scraping results from all year")
@@ -365,7 +365,7 @@ try:
 
         # Concat dfs
         try:
-            last_5_ys_yealy_stats = pd.concat([last_5_ys_yealy_stats_1_df,  last_5_ys_yealy_stats_2_df], ignore_index=True)
+            last_5_ys_yearly_stats = pd.concat([last_5_ys_yearly_stats_1_df,  last_5_ys_yearly_stats_2_df], ignore_index=True)
 
         except Exception as e:
             print(f"{e}")
@@ -373,18 +373,18 @@ try:
         # Clean dfs
         try:
             # Step 1: Rename columns
-            last_5_ys_yealy_stats.columns = ['statistic', 'player_name', 'team_name', 'no', 'top_25', 'year', 'league', 'stat_title']
+            last_5_ys_yearly_stats.columns = ['statistic', 'player_name', 'team_name', 'no', 'top_25', 'year', 'league', 'stat_title']
 
             # Step 2: Convert values type
             # 2.1. year column to integer
-            last_5_ys_yealy_stats['year'] = last_5_ys_yealy_stats['year'].astype(int)
+            last_5_ys_yearly_stats['year'] = last_5_ys_yearly_stats['year'].astype(int)
             
             # 2.1. no column to float
 
-            last_5_ys_yealy_stats['no'] = last_5_ys_yealy_stats['no'].replace("--", np.nan).astype(float)
+            last_5_ys_yearly_stats['no'] = last_5_ys_yearly_stats['no'].replace("--", np.nan).astype(float)
 
-            print(last_5_ys_yealy_stats)
-            last_5_ys_yealy_stats.info()
+            print(last_5_ys_yearly_stats)
+            last_5_ys_yearly_stats.info()
 
         except Exception as e:
             print(f"{e}")
@@ -393,15 +393,15 @@ try:
             print(f"{e}")
 
     # ---------------------------------------------------------- #
-    # 1.3. Normalize last_5_ys_yealy_stats 
+    # 1.3. Normalize last_5_ys_yearly_stats 
     # ---------------------------------------------------------- #   
 
     """full db schema draft:
     - statistics and stat_titles step1:
     - df: statistics:
-        col: statistics.statistic -> data form last_5_ys_yealy_stats.statistics
-        cole: statistics.stat_title -> data from last_5_ys_yealy_stats.stat_title
-        col: statistics.statistic_id pk -> last_5_ys_yealy_stats.statistic_id fk
+        col: statistics.statistic -> data form last_5_ys_yearly_stats.statistics
+        cole: statistics.stat_title -> data from last_5_ys_yearly_stats.stat_title
+        col: statistics.statistic_id pk -> last_5_ys_yearly_stats.statistic_id fk
 
                 - statistics and stat_titles step2:
                 - df: stat_titles:
@@ -410,14 +410,14 @@ try:
 
                 - df: statistics:
                     col: statistics.statistic (nothing canges) -> data
-                    col: statistics.statistic_id pk (nothing canges) -> last_5_ys_yealy_stats.statistic_id fk
+                    col: statistics.statistic_id pk (nothing canges) -> last_5_ys_yearly_stats.statistic_id fk
                     col: statistics.stat_title_id fk -> stat_title.stat_title_id pk 
 
     - players and teams step1:
     - df: players:
-        col: players.player_name -> data from last_5_ys_yealy_stats.player_name
-        col: players.team_name -> data from last_5_ys_yealy_stats.team_name
-        col: players.player_id pk -> last_5_ys_yealy_stats.player_id fk 
+        col: players.player_name -> data from last_5_ys_yearly_stats.player_name
+        col: players.team_name -> data from last_5_ys_yearly_stats.team_name
+        col: players.player_id pk -> last_5_ys_yearly_stats.player_id fk 
 
             - players and teams step2:
                 - df: teams:
@@ -425,27 +425,27 @@ try:
                     col: teams.team_id pk -> players.team_id fk
 
                 - df: players:
-                    col: players.player_name (nothing canges) -> data from last_5_ys_yealy_stats.player_name
+                    col: players.player_name (nothing canges) -> data from last_5_ys_yearly_stats.player_name
                     col: players.player_id pk -> players.player_id fk 
                     col: players.player_id fk -> teams.player_id pk
                                     
     - years:
-        col: years.year -> data from last_5_ys_yealy_stats.year (is this needed)
-        col: years.year_id pk -> last_5_ys_yealy_stats.year_id fk
+        col: years.year -> data from last_5_ys_yearly_stats.year (is this needed)
+        col: years.year_id pk -> last_5_ys_yearly_stats.year_id fk
 
     - leagues:
-        col: leagues.league_name -> data from last_5_ys_yealy_stats.league
-        col: leagues.league_id pk -> last_5_ys_yealy_stats.league_id fk
+        col: leagues.league_name -> data from last_5_ys_yearly_stats.league
+        col: leagues.league_id pk -> last_5_ys_yearly_stats.league_id fk
 
-    - last_5_ys_yealy_stats:
-        col: last_5_ys_yealy_stats.statistic_id fk -> statistics.statistic_id pk
-        col: last_5_ys_yealy_stats.player_id (old: last_5_ys_yealy_stats.player_name) -> players.player_id pk
-        col: last_5_ys_yealy_stats.team_id (old: last_5_ys_yealy_stats.team_name) -> players join teams on plaier_id, teams.team_id pk
-        col: last_5_ys_yealy_stats.no (nothing changes) -> data
-        col: last_5_ys_yealy_stats.top_25 (nothing_changes) -> data
-        col: last_5_ys_yealy_stats.year_id fk (old: last_5_ys_yealy_stats.year) -> years.year_id pk
-        col: last_5_ys_yealy_stats.league_id fk (old: last_5_ys_yealy_stats.league) -> leagues.league_id pk
-        col: last_5_ys_yealy_stats.stat_title_id fk (old: last_5_ys_yealy_stats.stat_title) -> statistics join stat_titles on statistic_id, stat_titles.stat_title_id
+    - last_5_ys_yearly_stats:
+        col: last_5_ys_yearly_stats.statistic_id fk -> statistics.statistic_id pk
+        col: last_5_ys_yearly_stats.player_id (old: last_5_ys_yearly_stats.player_name) -> players.player_id pk
+        col: last_5_ys_yearly_stats.team_id (old: last_5_ys_yearly_stats.team_name) -> players join teams on plaier_id, teams.team_id pk
+        col: last_5_ys_yearly_stats.no (nothing changes) -> data
+        col: last_5_ys_yearly_stats.top_25 (nothing_changes) -> data
+        col: last_5_ys_yearly_stats.year_id fk (old: last_5_ys_yearly_stats.year) -> years.year_id pk
+        col: last_5_ys_yearly_stats.league_id fk (old: last_5_ys_yearly_stats.league) -> leagues.league_id pk
+        col: last_5_ys_yearly_stats.stat_title_id fk (old: last_5_ys_yearly_stats.stat_title) -> statistics join stat_titles on statistic_id, stat_titles.stat_title_id
     """
 
     # 1.3.0: normalization function:
@@ -486,7 +486,7 @@ try:
     try:
         # statistics
         statistics = create_lookup_df(
-            last_5_ys_yealy_stats, 
+            last_5_ys_yearly_stats, 
             'statistic', 'stat_title', 
             id_col_name='statistic_id')
 
@@ -496,7 +496,7 @@ try:
 
         # players
         players = create_lookup_df(
-            last_5_ys_yealy_stats, 
+            last_5_ys_yearly_stats, 
             'player_name', 'team_name', 
             id_col_name='player_id')
 
@@ -506,7 +506,7 @@ try:
 
         # years
         years = create_lookup_df(
-            last_5_ys_yealy_stats, 
+            last_5_ys_yearly_stats, 
             'year', 
             id_col_name='year_id')
 
@@ -516,7 +516,7 @@ try:
 
         # leagues
         leagues = create_lookup_df(
-            last_5_ys_yealy_stats, 
+            last_5_ys_yearly_stats, 
             'league', 
             id_col_name='league_id')
 
@@ -634,49 +634,49 @@ try:
         # print(players)
         # players.info()
         
-        # last_5_ys_yealy_stats: statistic_id:
-        last_5_ys_yealy_stats = add_combined_foreign_key(
-            last_5_ys_yealy_stats, 
+        # last_5_ys_yearly_stats: statistic_id:
+        last_5_ys_yearly_stats = add_combined_foreign_key(
+            last_5_ys_yearly_stats, 
             statistics, 
             ['statistic', 'stat_title'],
             'statistic_id')
 
-        # print(f"\n last_5_ys_yealy_stats df with statistic_id: \n")
-        # print(last_5_ys_yealy_stats)
-        # last_5_ys_yealy_stats.info()
+        # print(f"\n last_5_ys_yearly_stats df with statistic_id: \n")
+        # print(last_5_ys_yearly_stats)
+        # last_5_ys_yearly_stats.info()
 
-        # last_5_ys_yealy_stats: player_id: 
-        last_5_ys_yealy_stats = add_combined_foreign_key(
-            last_5_ys_yealy_stats, 
+        # last_5_ys_yearly_stats: player_id: 
+        last_5_ys_yearly_stats = add_combined_foreign_key(
+            last_5_ys_yearly_stats, 
             players, 
             ['player_name', 'team_name'],
             'player_id')
 
-        # print(f"\n last_5_ys_yealy_stats df with statistic_id, player_id: \n")
-        # print(last_5_ys_yealy_stats)
-        # last_5_ys_yealy_stats.info()
+        # print(f"\n last_5_ys_yearly_stats df with statistic_id, player_id: \n")
+        # print(last_5_ys_yearly_stats)
+        # last_5_ys_yearly_stats.info()
 
-        # last_5_ys_yealy_stats: year_id: 
-        last_5_ys_yealy_stats = add_simple_foreign_key(
-            last_5_ys_yealy_stats, 
+        # last_5_ys_yearly_stats: year_id: 
+        last_5_ys_yearly_stats = add_simple_foreign_key(
+            last_5_ys_yearly_stats, 
             years, 
             'year',
             'year_id')
 
-        # print(f"\n last_5_ys_yealy_stats df with statistic_id, player_id, year_id: \n")
-        # print(last_5_ys_yealy_stats)
-        # last_5_ys_yealy_stats.info()
+        # print(f"\n last_5_ys_yearly_stats df with statistic_id, player_id, year_id: \n")
+        # print(last_5_ys_yearly_stats)
+        # last_5_ys_yearly_stats.info()
 
-        # last_5_ys_yealy_stats: league_id: 
-        last_5_ys_yealy_stats = add_simple_foreign_key(
-            last_5_ys_yealy_stats, 
+        # last_5_ys_yearly_stats: league_id: 
+        last_5_ys_yearly_stats = add_simple_foreign_key(
+            last_5_ys_yearly_stats, 
             leagues, 
             'league',
             'league_id')
 
-        # print(f"\n last_5_ys_yealy_stats df with statistic_id, player_id, year_id, league_id: \n")
-        # print(last_5_ys_yealy_stats)
-        # last_5_ys_yealy_stats.info()
+        # print(f"\n last_5_ys_yearly_stats df with statistic_id, player_id, year_id, league_id: \n")
+        # print(last_5_ys_yearly_stats)
+        # last_5_ys_yearly_stats.info()
 
     except Exception as e:
             print(f"{e}")
@@ -718,12 +718,12 @@ try:
         print(players)
         players.info()
 
-        # last_5_ys_yealy_stats: drop statistic, player_name, team_name, year, stat_title
-        last_5_ys_yealy_stats = drop_columns(last_5_ys_yealy_stats, 'statistic', 'player_name', 'team_name', 'league', 'year', 'stat_title')
+        # last_5_ys_yearly_stats: drop statistic, player_name, team_name, year, stat_title
+        last_5_ys_yearly_stats = drop_columns(last_5_ys_yearly_stats, 'statistic', 'player_name', 'team_name', 'league', 'year', 'stat_title')
 
-        print(f"\n last_5_ys_yealy_stats df: statistic, player_name, team_name, league, year, and stat_title dropped \n")
-        print(last_5_ys_yealy_stats)
-        last_5_ys_yealy_stats.info()
+        print(f"\n last_5_ys_yearly_stats df: statistic, player_name, team_name, league, year, and stat_title dropped \n")
+        print(last_5_ys_yearly_stats)
+        last_5_ys_yearly_stats.info()
 
     except Exception as e:
         print(f"{e}")
@@ -755,7 +755,7 @@ try:
                 'teams': teams,
                 'years': years,
                 'leagues': leagues,
-                'last_5_ys_yealy_stats': last_5_ys_yealy_stats
+                'last_5_ys_yearly_stats': last_5_ys_yearly_stats
             },
             folder_path='csv'
         )
