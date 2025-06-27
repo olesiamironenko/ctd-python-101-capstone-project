@@ -18,10 +18,17 @@ def show_menu():
 def query_one_year_statistics(conn):
     try:
         year = input("Enter year (any from 2021 to 2025): ").strip()
-        cursor = conn.execute("""SELECT last_5_ys_yealy_stats.no, league, avg 
-            FROM batting_avg_leaders 
-            WHERE year = ? 
-            ORDER BY year DESC""", (year,))
+        year = input("Enter league (A for American League, N for National League): ").strip()
+        cursor = conn.execute("""SELECT 
+        stat_titles.stat_title,
+        statistics.statistic,
+        last_5_ys_yealy_stats.no, 
+        leagues.league, 
+        teams.team_name,
+        players.player_name
+            FROM last_5_ys_yearly 
+            WHERE years.year = ? and leagues.league = ?
+            ORDER BY last_5_ys_yealy_stats.no DESC""", (year,))
         results = cursor.fetchall()
         if results:
             print(f"\nTop hitters in {year}:")

@@ -719,11 +719,11 @@ try:
         players.info()
 
         # last_5_ys_yealy_stats: drop statistic, player_name, team_name, year, stat_title
-        last_5_ys_yealy_stats = drop_columns(last_5_ys_yealy_stats, 'statistic', 'player_name', 'team_name', 'league', 'year', 'stat_title')
+        last_5_ys_yearly_stats = drop_columns(last_5_ys_yearly_stats, 'statistic', 'player_name', 'team_name', 'league', 'year', 'stat_title')
 
         print(f"\n last_5_ys_yealy_stats df: statistic, player_name, team_name, league, year, and stat_title dropped \n")
-        print(last_5_ys_yealy_stats)
-        last_5_ys_yealy_stats.info()
+        print(last_5_ys_yearly_stats)
+        last_5_ys_yearly_stats.info()
 
     except Exception as e:
         print(f"{e}")
