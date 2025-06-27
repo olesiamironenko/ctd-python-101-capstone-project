@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS leagues (
     league TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS last_5_ys_yealy_stats (
+CREATE TABLE IF NOT EXISTS last_5_ys_yearly_stats (
     statistic_id INTEGER NOT NULL,
     player_id INTEGER NOT NULL,
     no REAL,

@@ -22,13 +22,13 @@ def query_one_year_statistics(conn):
         cursor = conn.execute("""SELECT 
         stat_titles.stat_title,
         statistics.statistic,
-        last_5_ys_yealy_stats.no, 
+        last_5_ys_yearly_stats.no, 
         leagues.league, 
         teams.team_name,
         players.player_name
             FROM last_5_ys_yearly 
             WHERE years.year = ? and leagues.league = ?
-            ORDER BY last_5_ys_yealy_stats.no DESC""", (year,))
+            ORDER BY last_5_ys_yearly_stats.no DESC""", (year,))
         results = cursor.fetchall()
         if results:
             print(f"\nTop hitters in {year}:")

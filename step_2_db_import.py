@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS leagues (
     league TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS last_5_ys_yealy_stats (
+CREATE TABLE IF NOT EXISTS last_5_ys_yearly_stats (
     statistic_id INTEGER NOT NULL,
     player_id INTEGER NOT NULL,
     no REAL,
@@ -96,7 +96,7 @@ csv_to_table = {
     'players.csv': 'players',
     'years.csv': 'years',
     'leagues.csv': 'leagues',
-    'last_5_ys_yealy_stats.csv': 'last_5_ys_yealy_stats'
+    'last_5_ys_yearly_stats.csv': 'last_5_ys_yearly_stats'
 }
 
 for filename, table_name in csv_to_table.items():
