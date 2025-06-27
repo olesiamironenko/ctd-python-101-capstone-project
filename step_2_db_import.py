@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, text
 CSV_DIR = 'csv'  # folder with CSVs
 db_folder = 'db'
 db_name = 'baseball_stats.db'
-schema_file = 'schema.sql'
+schema_file = os.path.join(db_folder, 'schema.sql')
 db_path = os.path.join(db_folder, db_name)
 
 # -----------------------------
