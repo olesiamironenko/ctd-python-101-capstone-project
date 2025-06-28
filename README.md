@@ -21,12 +21,12 @@ This Streamlit web app provides an interactive dashboard to explore MLB player p
 - **SQLAlchemy** – ORM for DB access
 
 ## Directory Structure
-```.
-├── step_4_dashboard.py # Main Streamlit app
-├── db/
-│ └── baseball_stats.db # SQLite database
-├── requirements.txt
-└── README.md```
+    <pre><code>```.
+    ├── step_4_dashboard.py # Main Streamlit app
+    ├── db/
+    │ └── baseball_stats.db # SQLite database
+    ├── requirements.txt
+    └── README.md``` </code></pre>
 
 ## Installation
 
