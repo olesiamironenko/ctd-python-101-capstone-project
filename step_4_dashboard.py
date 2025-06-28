@@ -4,6 +4,7 @@ import os
 from sqlalchemy import create_engine, text
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np
 
 # --- Database connection setup ---
 db_folder = 'db'
@@ -31,34 +32,6 @@ def fetch_distinct_column_values(engine, table, column, order_by=None, fallback=
             st.error(f"Failed to load {column} from {table}: {e}")
             return []
 
-def get_sortable_columns(engine, league, year, stat_title):
-    try:
-        query = text("""
-            SELECT 
-                s.statistic AS "Statistic",
-                ls.no AS "Results",
-                p.player_name AS "Player Name",
-                t.team_name AS "Team Name"
-            FROM last_5_ys_yealy_stats AS ls
-            JOIN statistics AS s ON ls.statistic_id = s.statistic_id
-            JOIN stat_titles AS st ON s.stat_title_id = st.stat_title_id
-            JOIN players AS p ON ls.player_id = p.player_id
-            JOIN teams AS t ON p.team_id = t.team_id
-            JOIN years AS y ON ls.year_id = y.year_id
-            JOIN leagues AS l ON ls.league_id = l.league_id
-            WHERE l.league = :league AND y.year = :year AND st.stat_title = :stat_title
-            LIMIT 1
-        """)
-        df = pd.read_sql(query, engine, params={
-            'league': league,
-            'year': int(year),
-            'stat_title': stat_title
-        })
-        return df.columns.tolist()
-    except Exception as e:
-        st.warning(f"Couldn't load columns dynamically, using default list. ({e})")
-        return ['Results', 'Player Name', 'Team Name', 'Statistic']
-
 def fetch_statistics_by_title(engine, stat_title, fallback=None):
     try:
         query = text("""
@@ -80,42 +53,34 @@ def fetch_statistics_by_title(engine, stat_title, fallback=None):
         else:
             st.error(f"Failed to fetch statistics for {stat_title}: {e}")
             return []
-
-def multi_select_with_all(label, options, default_all=True):
-    all_option = "All"
-    options_with_all = [all_option] + options
-
-    if default_all:
-        default = [all_option]
-    else:
-        default = []
-
-    selected = st.multiselect(label, options_with_all, default=default)
-
-    if all_option in selected or not selected:
-        # Treat 'All' selected or nothing selected as all options chosen
-        return options
-    else:
-        return selected
-
+        
 # --- Dashboard functions ---
 
 def get_statistics_by_league_stat_title(engine):
-    st.title("Yearly Best Results Lookup")
+    st.title("Yearly Best Results (2021-2024)")
 
     # Fetch dropdown options with fallback
     leagues = fetch_distinct_column_values(engine, 
         'leagues', 'league', 
         fallback=['American League', 'National League'])
+    
     stat_titles = fetch_distinct_column_values(engine, 
         'stat_titles', 'stat_title', 
         fallback=['Hitting Statistics', 'Pitching Statistics'])
+    
+    years = fetch_distinct_column_values(engine, 
+        'years', 'year', 
+        order_by='year', 
+        fallback=[2021, 2022, 2023, 2024])
+    years = sorted([int(y) for y in years])  # ensure int sorted
 
     # Sidebar selectors
     with st.sidebar:
         st.header("Filter Options")
-        selected_league = st.selectbox("Select League", leagues)   
-        selected_stat_title = st.selectbox("Select Statistic Group", stat_titles)
+        selected_league = st.radio("Select League", leagues)   
+        selected_stat_title = st.radio("Select Statistic Group", stat_titles)
+        selected_year = st.selectbox("Select Year", years, index=len(years)-2)
+
 
         # Define fallback options
         fallback_stats = {
@@ -162,7 +127,9 @@ def get_statistics_by_league_stat_title(engine):
             st.warning("No data found for the selected filters.")
             return
 
-        # st.success(f"Showing {selected_statistic} for {selected_league} - {selected_stat_title}")
+        # Dinamic title
+        st.subheader(f"Showing {selected_statistic} for {selected_league} - {selected_stat_title}")
+        st.dataframe(df, use_container_width=True)
 
         df = df.dropna()
 
@@ -239,7 +206,7 @@ def get_statistics_by_league_stat_title(engine):
             y="Results",
             color="League", 
             markers=True,
-            title=f"{selected_statistic} Over Time by League"
+            title=f"American League and National League <br>{selected_stat_title} {selected_statistic} Over Time Compparison"
         )
         fig2.update_layout(
             height=500,
@@ -257,7 +224,7 @@ def get_statistics_by_league_stat_title(engine):
         st.error(f"An error occurred: {e}")
 
 def top_25_players_ranked(engine):
-    st.title("Top 25 Players Ranked (2021-2025)")
+    st.title("Best Players Ranked (2021-2024)")
 
     # Sidebar filters
     with st.sidebar:
@@ -266,8 +233,8 @@ def top_25_players_ranked(engine):
         leagues = fetch_distinct_column_values(engine, "leagues", "league", fallback=["American League", "National League"])
         stat_titles = fetch_distinct_column_values(engine, "stat_titles", "stat_title", fallback=["Hitting Statistics", "Pitching Statistics"])
 
-        league = st.selectbox("Select League", leagues)
-        stat_title = st.selectbox("Select Statistic Group", stat_titles)
+        league = st.radio("Select League", leagues)
+        stat_title = st.radio("Select Statistic Group", stat_titles)
 
         fallback_stats = {
             "Hitting Statistics": ["Base on Balls", "Batting Average", "Doubles", "Hits", "Home Runs", "On Base Percentage", "RBI", "Runs", "Slugging Average", "Stolen Bases", "Total Bases", "Triples"],
@@ -280,6 +247,7 @@ def top_25_players_ranked(engine):
         query = text("""
             SELECT 
                 p.player_name AS "Player Name",
+                t.team_name AS "Team Name",
                 ls.no AS "Results",
                 s.statistic AS "Statistic",
                 y.year AS "Year"
@@ -287,13 +255,13 @@ def top_25_players_ranked(engine):
             JOIN statistics AS s ON ls.statistic_id = s.statistic_id
             JOIN stat_titles AS st ON s.stat_title_id = st.stat_title_id
             JOIN players AS p ON ls.player_id = p.player_id
+            JOIN teams AS t ON p.team_id = t.team_id
             JOIN years AS y ON ls.year_id = y.year_id
             JOIN leagues AS l ON ls.league_id = l.league_id
             WHERE l.league = :league 
               AND st.stat_title = :stat_title 
               AND s.statistic = :statistic
             ORDER BY ls.no DESC
-            LIMIT 25
         """)
 
         df = pd.read_sql(query, engine, params={
@@ -312,16 +280,75 @@ def top_25_players_ranked(engine):
         df = df[['Rank', 'Player Name', 'Results', 'Year']]
 
         # Dinamic title
-        st.success(f"Top 25 {statistic_name} in {league} - {stat_title} (2021-2025)")
+        st.subheader(f"Top 25 {statistic_name} in {league} - {stat_title} (2021-2024)")
         st.dataframe(df, use_container_width=True)
+
+        # Query all player stats with team and year
+        player_counts_query = text("""
+            SELECT 
+                p.player_name AS "Player Name",
+                t.team_name AS "Team Name",
+                ls.no AS "Results",
+                s.statistic AS "Statistic",
+                y.year AS "Year"
+            FROM last_5_ys_yealy_stats AS ls
+            JOIN players AS p ON ls.player_id = p.player_id
+            JOIN teams AS t ON p.team_id = t.team_id
+            JOIN statistics AS s ON ls.statistic_id = s.statistic_id
+            JOIN stat_titles AS st ON s.stat_title_id = st.stat_title_id
+            JOIN years AS y ON ls.year_id = y.year_id
+            JOIN leagues AS l ON ls.league_id = l.league_id
+        """)
+
+        # Run the query (no params needed)
+        player_counts = pd.read_sql(player_counts_query, engine)
+
+        # Replace "To Be Determined" with NaN, then drop rows with NaN in 'Team Name'
+        player_counts['Team Name'] = player_counts['Team Name'].replace("To Be Determined", np.nan)
+        player_counts = player_counts.dropna()
+
+        player_counts = (
+            player_counts.groupby(['Team Name', 'Player Name'])
+            .size()
+            .reset_index(name='Count')
+        )
+        
+        # Chart title
+        st.subheader("Number of Times Each Player Was Best (2021–2024)")
+        
+        # Slider
+        min_count = st.slider(
+        "Minimum Wins per Player",
+        min_value=1,
+        max_value=int(player_counts['Count'].max()),
+        value=st.session_state.get("min_count", 1),
+        key="min_count"
+    )
+
+        # Filter data
+        filtered_data = player_counts[player_counts['Count'] >= min_count]
+
+        # Plot the chart
+        fig = px.sunburst(
+            filtered_data,
+            path=['Team Name', 'Player Name'],
+            values='Count'
+        )
+        fig.update_layout(
+            width=700,
+            height=700
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
     except Exception as e:
         st.error(f"Error fetching data: {e}")
 
 # --- Main ---
 if __name__ == "__main__":
-    page = st.sidebar.selectbox("Choose Page", ["Stats Lookup", "Top 25 Players Ranked"])
-    if page == "Stats Lookup":
+    page = st.sidebar.selectbox("Choose Page", ["Yearly Best Results", "Best Players Ranked"])
+    if page == "Yearly Best Results":
         get_statistics_by_league_stat_title(engine)
     else:
         top_25_players_ranked(engine)
+
+    
