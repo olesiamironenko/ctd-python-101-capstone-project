@@ -1,3 +1,4 @@
+# CtD Python 101 Capstone Project
 # Baseball Statistics Dashboard (2021–2024)
 
 This Streamlit web app provides an interactive dashboard to explore MLB player performance statistics from 2021 to 2024. It includes tools to view yearly leaders, compare leagues over time, and visualize standout players with interactive charts.
@@ -20,12 +21,12 @@ This Streamlit web app provides an interactive dashboard to explore MLB player p
 - **SQLAlchemy** – ORM for DB access
 
 ## Directory Structure
-.
+```.
 ├── step_4_dashboard.py # Main Streamlit app
 ├── db/
 │ └── baseball_stats.db # SQLite database
 ├── requirements.txt
-└── README.md
+└── README.md```
 
 ## Installation
 
@@ -60,15 +61,13 @@ Make sure db/baseball_stats.db exists with the required schema and data.
 The app assumes statistics and metadata (e.g. leagues, stat_titles) are available in related lookup tables.
 
 ## Screenshots
-[Dashboard Overview: Yearly Best Results]
-(screenshots/dahsboard_yearly_best_results_1.png)
-(screenshots/dahsboard_yearly_best_results_2.png)
-(screenshots/dahsboard_yearly_best_results_3.png)
+![Dashboard Overview: Yearly Best Results](screenshots/dahsboard_yearly_best_results_1.png)
+![Dashboard Overview: Yearly Best Results](screenshots/dahsboard_yearly_best_results_2.png)
+![Dashboard Overview: Yearly Best Results](screenshots/dahsboard_yearly_best_results_3.png)
 
-[Dashboard Overview: Best Players]
-(screenshots/dahsboard_best_players_1.png)
-(screenshots/dahsboard_best_players_2.png)
-(screenshots/dahsboard_best_players_3.png)
+![Dashboard Overview: Best Players](screenshots/dahsboard_best_players_1.png)
+![Dashboard Overview: Best Players](screenshots/dahsboard_best_players_2.png)
+![Dashboard Overview: Best Players](screenshots/dahsboard_best_players_3.png)
 
 ## License
 MIT License – feel free to use and modify.
